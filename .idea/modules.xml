@@ -2,8 +2,11 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/aop/aop.iml" filepath="$PROJECT_DIR$/aop/aop.iml" />
       <module fileurl="file://$PROJECT_DIR$/decoratorpattern/decoratorpattern.iml" filepath="$PROJECT_DIR$/decoratorpattern/decoratorpattern.iml" />
+      <module fileurl="file://$PROJECT_DIR$/demo/demo.iml" filepath="$PROJECT_DIR$/demo/demo.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/designModel.iml" filepath="$PROJECT_DIR$/.idea/designModel.iml" />
+      <module fileurl="file://$PROJECT_DIR$/filtermode/filtermode.iml" filepath="$PROJECT_DIR$/filtermode/filtermode.iml" />
     </modules>
   </component>
 </project>
