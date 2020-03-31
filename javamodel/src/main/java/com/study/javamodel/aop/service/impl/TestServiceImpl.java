@@ -1,7 +1,8 @@
-package com.designmodel.aop.service.impl;
+package com.study.javamodel.aop.service.impl;
 
-import com.designmodel.aop.entity.Test;
-import com.designmodel.aop.service.TestService;
+
+import com.study.javamodel.aop.entity.Test;
+import com.study.javamodel.aop.service.TestService;
 import org.springframework.stereotype.Service;
 
 @Service

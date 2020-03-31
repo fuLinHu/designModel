@@ -1,8 +1,8 @@
-package com.designmodel.aop.controller;
+package com.study.javamodel.aop.controller;
 
-import com.designmodel.aop.entity.Test;
-import com.designmodel.aop.service.TestService;
-import com.designmodel.aop.service.TestValiService;
+
+import com.study.javamodel.aop.entity.Test;
+import com.study.javamodel.aop.service.TestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

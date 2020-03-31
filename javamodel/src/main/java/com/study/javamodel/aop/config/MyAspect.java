@@ -1,9 +1,8 @@
-package com.designmodel.aop.config;
+package com.study.javamodel.aop.config;
 
-import com.designmodel.aop.entity.Test;
-import com.designmodel.aop.service.TestValiService;
-import com.designmodel.aop.service.impl.TestServiceImpl;
-import com.designmodel.aop.service.impl.TestValiServiceImpl;
+
+
+import com.study.javamodel.aop.entity.Test;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
@@ -16,7 +15,7 @@ import org.springframework.stereotype.Component;
 public class MyAspect {
 
 
-    @Pointcut("execution(* com.designmodel.aop.service.impl..*.*(..))")
+    @Pointcut("execution(* com.study.javamodel.aop.service.impl..*.*(..))")
     public void pointCut(){
 
     }

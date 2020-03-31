@@ -1,6 +1,6 @@
-package com.designmodel.aop.service;
+package com.study.javamodel.aop.service;
 
-import com.designmodel.aop.entity.Test;
+import com.study.javamodel.aop.entity.Test;
 import org.springframework.stereotype.Service;
 
 public interface TestValiService {

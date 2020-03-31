@@ -1,4 +1,4 @@
-package com.designmodel.aop.entity;
+package com.study.javamodel.aop.entity;
 
 public class Test {
     private String name;
