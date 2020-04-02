@@ -1,6 +1,4 @@
-package com.study.javamodel.juc.base.guardeobj;
-
-import sun.rmi.runtime.Log;
+package com.study.javamodel.juc.base.guardeobj.two;
 
 /**
  * @className
@@ -15,7 +13,7 @@ public class GuardeObject {
         GuardeObjectModel guardeObjectModel = new GuardeObjectModel();
         new Thread(()->{
             System.out.println("启动线程等待获取下载结果："+Thread.currentThread().getName());
-            Object o = guardeObjectModel.get();
+            Object o = guardeObjectModel.get(200);
             System.out.println("获取到下载结果，然后运行其他逻辑："+Thread.currentThread().getName());
         },"t1").start();
 
@@ -36,16 +34,22 @@ public class GuardeObject {
 
 class GuardeObjectModel{
     private Object respon;
-    public Object get(){
+    public Object get(long waiteTime){
         synchronized (this){
             System.out.println("判断是否有数据："+Thread.currentThread().getName());
+            long l = System.currentTimeMillis();
+            long passTime = 0;
             while (respon==null){
+                if(passTime>waiteTime){
+                    break;
+                }
                 try {
                     System.out.println("等待获取respon："+Thread.currentThread().getName());
-                    this.wait();
+                    this.wait(waiteTime);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
+                passTime= System.currentTimeMillis()-l;
             }
             System.out.println("获取结果执行其他逻辑！："+Thread.currentThread().getName());
         }
