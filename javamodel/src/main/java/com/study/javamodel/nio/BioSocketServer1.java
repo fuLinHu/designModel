@@ -1,4 +1,4 @@
-package tes;
+package com.study.javamodel.nio;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
