@@ -13,7 +13,7 @@ public class GuardeObject {
         GuardeObjectModel guardeObjectModel = new GuardeObjectModel();
         new Thread(()->{
             System.out.println("启动线程等待获取下载结果："+Thread.currentThread().getName());
-            Object o = guardeObjectModel.get(200);
+            Object o = guardeObjectModel.get(900);
             System.out.println("获取到下载结果，然后运行其他逻辑："+Thread.currentThread().getName());
         },"t1").start();
 
@@ -24,7 +24,7 @@ public class GuardeObject {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            guardeObjectModel.complate(new Object());
+            guardeObjectModel.complate(null);
             System.out.println("完成下载任务，我可以执行其他操作："+Thread.currentThread().getName());
 
         },"t2").start();
@@ -40,12 +40,14 @@ class GuardeObjectModel{
             long l = System.currentTimeMillis();
             long passTime = 0;
             while (respon==null){
-                if(passTime>waiteTime){
-                    break;
+                long otherTime = waiteTime-passTime;
+                if(otherTime<0){
+                    System.out.println("超时退出运行：："+Thread.currentThread().getName());
+                    throw new RuntimeException("timeout -----------");
                 }
                 try {
                     System.out.println("等待获取respon："+Thread.currentThread().getName());
-                    this.wait(waiteTime);
+                    this.wait(otherTime);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
