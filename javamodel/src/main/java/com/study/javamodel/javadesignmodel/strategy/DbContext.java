@@ -13,6 +13,7 @@ public class DbContext {
     public DbContext(Db  db){
         this.db=db;
     }
+
     public void executeDb(){
         db.doSql("select * from table");
     }
