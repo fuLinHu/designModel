@@ -18,9 +18,9 @@ public class TestSemaphore {
         for (int i = 0; i <10 ; i++) {
             int j =i;
             new Thread(()->{
-                log.info("开始运行第"+j);
                 try {
                     semaphore.acquire();
+                    log.info("开始运行第"+j);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
