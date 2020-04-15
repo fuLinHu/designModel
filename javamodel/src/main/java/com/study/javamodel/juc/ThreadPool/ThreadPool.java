@@ -56,10 +56,10 @@ public class ThreadPool {
                 }
 
             }
-            synchronized (works){
+            /*synchronized (works){
                 works.remove(this);
-            }
-
+                log.info("======-------删除完以后的长度：："+works.size());
+            }*/
         }
     }
 }
