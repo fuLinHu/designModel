@@ -4,3 +4,4 @@ javamodel/.mvn/
 javamodel/mvnw
 javamodel/mvnw.cmd
 
+src/main/java/com/study/javamodel/javadesignmodel/proxy/staticproxy/
