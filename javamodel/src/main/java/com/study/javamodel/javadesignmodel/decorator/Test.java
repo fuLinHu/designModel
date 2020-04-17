@@ -15,7 +15,5 @@ public class Test {
         HongQi hongQi = new HongQi();
         HongQiDecorator hongQiDecorator = new HongQiDecorator(hongQi);
         hongQiDecorator.run();
-        //HttpServletRequest
-        //BufferedInputStream bufferedInputStream = new BufferedInputStream();
     }
 }
