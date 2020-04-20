@@ -1,12 +1,11 @@
-package springAll.condiction.Config;
+package springAll.condiction;
 
 import commit.entity.Student;
 import commit.entity.User;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Conditional;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.*;
 import springAll.condiction.MyCondiction;
+import springAll.condiction.aop.MyAopEntity.FlhCode;
 
 import java.util.Date;
 
@@ -19,6 +18,8 @@ import java.util.Date;
  */
 @Configuration
 @Slf4j
+@EnableAspectJAutoProxy
+@ComponentScan({"springAll.condiction"})
 public class MyConfig {
     @Bean("user")
     public User getUser(){
@@ -30,5 +31,9 @@ public class MyConfig {
     public User getStudent(){
         log.info("构建user");
         return new Student();
+    }
+    @Bean("flhCode")
+    public FlhCode getFlhCode(){
+        return new FlhCode();
     }
 }

@@ -2,7 +2,7 @@ package springAll.condiction;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import springAll.condiction.Config.MyConfig;
+import springAll.condiction.aop.MyAopEntity.FlhCode;
 
 /**
  * @className
@@ -19,6 +19,8 @@ public class Test {
         for (String name:beanDefinitionNames) {
             log.info("通过注解获取的bean:"+name);
         }
+        FlhCode flhCode = (FlhCode)app.getBean("flhCode");
+        flhCode.flhRun("flh");
 
 
     }
