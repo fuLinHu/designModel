@@ -1,6 +1,6 @@
 package com.study.javamodel.javadesignmodel.proxy.dynamicproxy;
 
-import com.fasterxml.jackson.databind.util.JSONPObject;
+import commit.entity.User;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.json.JSONObject;
 

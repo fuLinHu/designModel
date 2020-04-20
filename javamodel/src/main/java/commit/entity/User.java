@@ -1,6 +1,7 @@
-package com.study.javamodel.javadesignmodel.proxy.dynamicproxy;
+package commit.entity;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
@@ -12,6 +13,7 @@ import java.util.Date;
  * @Version V1.0
  */
 @Data
+@NoArgsConstructor
 public class User {
     private String name;
     private Integer age;

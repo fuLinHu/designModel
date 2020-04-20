@@ -1,5 +1,7 @@
 package com.study.javamodel.javadesignmodel.proxy.dynamicproxy;
 
+import commit.entity.User;
+
 import java.util.Date;
 
 /**
