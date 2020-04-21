@@ -26,6 +26,10 @@ public class User {
         this.hight = hight;
     }
 
+    public User(String name){
+        this.name=name;
+    }
+
     @Override
     public String toString() {
         return "User{" +

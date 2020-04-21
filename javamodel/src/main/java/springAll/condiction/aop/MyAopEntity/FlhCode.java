@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
  * @Version V1.0
  */
 @Slf4j
-@Component
 public class FlhCode {
 
     public Double flhSum(Double n1,Double n2){
