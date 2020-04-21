@@ -6,6 +6,7 @@
     <servlet>
         <servlet-name>myDispatcherServlet</servlet-name>
         <servlet-class>myspringmvc.servlet.MyDispatcherServlet</servlet-class>
+        <load-on-startup>0</load-on-startup>
     </servlet>
     <servlet-mapping>
         <servlet-name>myDispatcherServlet</servlet-name>

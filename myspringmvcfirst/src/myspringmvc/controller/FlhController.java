@@ -1,10 +1,12 @@
 package myspringmvc.controller;
 
-import springAll.myspringmvc.annotation.MyController;
-import springAll.myspringmvc.annotation.MyQualifier;
-import springAll.myspringmvc.annotation.MyRequestMapping;
-import springAll.myspringmvc.annotation.MyRequestParam;
-import springAll.myspringmvc.serrvice.FlhService;
+
+
+import myspringmvc.annotation.MyController;
+import myspringmvc.annotation.MyQualifier;
+import myspringmvc.annotation.MyRequestMapping;
+import myspringmvc.annotation.MyRequestParam;
+import myspringmvc.serrvice.FlhService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -25,7 +27,7 @@ public class FlhController {
     @MyQualifier("flhservice1")
     FlhService flhService;
 
-    public void query(HttpServletRequest re, HttpServletResponse res, @MyRequestParam("age") String age,@MyRequestParam("name") String name){
+    public void query(HttpServletRequest re, HttpServletResponse res, @MyRequestParam("age") String age, @MyRequestParam("name") String name){
         String query = flhService.query(age, name);
         PrintWriter writer = null;
         try {

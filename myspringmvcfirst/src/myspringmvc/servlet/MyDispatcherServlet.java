@@ -4,6 +4,7 @@ import myspringmvc.annotation.MyController;
 import myspringmvc.annotation.MyQualifier;
 import myspringmvc.annotation.MyRequestMapping;
 import myspringmvc.annotation.MyService;
+import myspringmvc.handler.HandlerService;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -13,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.util.*;
@@ -31,8 +33,8 @@ public class MyDispatcherServlet extends HttpServlet {
     }
     List<String> classNames = new ArrayList<>();
     Map<String,Object> beans = new HashMap<>();
-
     Map<String,Object> handMap = new HashMap<>();
+    Map<String,Map<String,Object>> methodMap = new HashMap<>();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -44,10 +46,21 @@ public class MyDispatcherServlet extends HttpServlet {
         //拿到的地址
         String requestURI = req.getRequestURI();
         String contextPath = req.getContextPath();
-        String contextPath1 = requestURI.replace("contextPath", "");
-
-
-        super.doPost(req, resp);
+        String contextPath1 = requestURI.replace(contextPath, "");
+        Method method = (Method)handMap.get(contextPath1);
+        Map<String, Object> stringObjectMap = methodMap.get(contextPath1);
+        String methodStr = (String)stringObjectMap.keySet().toArray()[0];
+        String controller = contextPath1.replace(methodStr, "");
+        Object o = beans.get(controller);
+        HandlerService handlerService = (HandlerService)beans.get("handlerServiceImpl");
+        Object[] args = handlerService.hand(req, resp, method, beans);
+        try {
+            Object invoke = method.invoke(o, args);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -89,6 +102,9 @@ public class MyDispatcherServlet extends HttpServlet {
                     if(method.isAnnotationPresent(MyRequestMapping.class)){
                         MyRequestMapping annotation1 = method.getAnnotation(MyRequestMapping.class);
                         String methodValue = annotation1.value();
+                        HashMap<String, Object> strHashMap = new HashMap<>();
+                        strHashMap.put(methodValue,method);
+                        methodMap.put(value+methodValue,strHashMap);
                         handMap.put(value+methodValue,method);
                     }
 
