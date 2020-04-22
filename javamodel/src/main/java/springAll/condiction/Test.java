@@ -21,6 +21,8 @@ public class Test {
         }
         FlhCode flhCode = (FlhCode)app.getBean("flhCode");
         flhCode.flhRun("flh");
+        Object flh = MyApplicationContext.getBeanByName("flhCode");
+        System.out.println(flh);
 
 
     }
