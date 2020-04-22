@@ -10,7 +10,7 @@ import java.lang.annotation.*;
  * @Version V1.0
  */
 
-@Target({ElementType.FIELD,ElementType.TYPE}) //只作用在字段 类
+@Target({ElementType.METHOD,ElementType.TYPE}) //只作用在字段 类
 @Retention(RetentionPolicy.RUNTIME) //可以反射获取
 @Documented //包含在java的doc中
 @Inherited // 可以被继承

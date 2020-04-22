@@ -29,10 +29,7 @@ public class HandlerServiceImpl implements HandlerService {
             }
             index++;
         }
-
-
-
-        return new Object[0];
+        return args;
     }
 
     private Map<String,Object> getInstanceType(Map<String,Object> beans, Class<?> classType) {

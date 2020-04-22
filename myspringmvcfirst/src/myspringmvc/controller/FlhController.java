@@ -27,6 +27,7 @@ public class FlhController {
     @MyQualifier("flhservice1")
     FlhService flhService;
 
+    @MyRequestMapping("/query")
     public void query(HttpServletRequest re, HttpServletResponse res, @MyRequestParam("age") String age, @MyRequestParam("name") String name){
         String query = flhService.query(age, name);
         PrintWriter writer = null;

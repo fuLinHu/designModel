@@ -1,9 +1,9 @@
 package myspringmvc.serrvice.impl;
 
-import commit.entity.User;
-import lombok.extern.slf4j.Slf4j;
-import springAll.myspringmvc.annotation.MyService;
-import springAll.myspringmvc.serrvice.FlhService;
+
+import myspringmvc.annotation.MyService;
+import myspringmvc.serrvice.FlhService;
+
 
 /**
  * @className
@@ -13,16 +13,15 @@ import springAll.myspringmvc.serrvice.FlhService;
  * @Version V1.0
  */
 @MyService("flhservice1")
-@Slf4j
 public class FlhServiceImpl implements FlhService {
     @Override
     public String  query(String age, String name) {
-        log.info("查询的age：："+age+" name::"+name);
+        System.out.println("查询的age：："+age+" name::"+name);
         return "查询的age：："+age+" name::"+name;
     }
 
     @Override
-    public void insert(User user) {
-        log.info("插入成功----");
+    public void insert(Object user) {
+        System.out.println("插入成功----");
     }
 }

@@ -1,6 +1,6 @@
 package myspringmvc.serrvice;
 
-import commit.entity.User;
+
 
 /**
  * @className
@@ -11,5 +11,5 @@ import commit.entity.User;
  */
 public interface FlhService {
     public String query(String age, String name);
-    public void insert(User user);
+    public void insert(Object object);
 }

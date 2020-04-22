@@ -46,7 +46,7 @@ public class MyDispatcherServlet extends HttpServlet {
         //拿到的地址
         String requestURI = req.getRequestURI();
         String contextPath = req.getContextPath();
-        String contextPath1 = requestURI.replace(contextPath, "");
+        String contextPath1 = requestURI.replaceFirst(contextPath,"");
         Method method = (Method)handMap.get(contextPath1);
         Map<String, Object> stringObjectMap = methodMap.get(contextPath1);
         String methodStr = (String)stringObjectMap.keySet().toArray()[0];
@@ -95,7 +95,7 @@ public class MyDispatcherServlet extends HttpServlet {
             Object instance = item.getValue();
             Class<?> aClass = instance.getClass();
             if(aClass.isAnnotationPresent(MyController.class)){
-                MyController annotation = aClass.getAnnotation(MyController.class);
+                MyRequestMapping annotation = aClass.getAnnotation(MyRequestMapping.class);
                 String value = annotation.value();
                 Method[] methods = aClass.getMethods();
                 for(Method method:methods){
