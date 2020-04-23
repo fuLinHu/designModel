@@ -1,6 +1,7 @@
 package springAll;
 
 import com.study.javamodel.JavamodelApplication;
+import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -13,7 +14,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  */
 @SpringBootApplication
 public class SpringAllApplication {
+
     public static void main(String[] args) {
+
         SpringApplication.run(SpringAllApplication.class, args);
     }
 }
