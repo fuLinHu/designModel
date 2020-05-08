@@ -4,4 +4,15 @@ javamodel/.mvn/
 javamodel/mvnw
 javamodel/mvnw.cmd
 
-src/main/java/com/study/javamodel/javadesignmodel/proxy/staticproxy/
+myjson-spring-boot-starter/.gitignore
+myjson-spring-boot-starter/.mvn/
+myjson-spring-boot-starter/mvnw
+myjson-spring-boot-starter/mvnw.cmd
+myspringall/.gitignore
+myspringall/.mvn/
+myspringall/mvnw
+myspringall/mvnw.cmd
+myspringmvcfirst/web/WEB-INF/classes/
+mytomcatw/src/test/
+mytomcatw/target/
+out/

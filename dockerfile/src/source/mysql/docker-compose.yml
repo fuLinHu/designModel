@@ -1,0 +1,41 @@
+version: '3'
+services:
+  mysql:
+    image: 192.168.102.131:5000/mysql
+    ports:
+      - "3306:3306"
+    volumes:
+      - /home/test/mysql/data:/var/lib/mysql
+      - /home/test/mysql/initdb:/docker-entrypoint-initdb.d
+      - /home/test/mysql/cnf/my.cnf:/etc/mysql/my.cnf
+    command: [
+      '--character-set-server=utf8mb4',
+      '--collation-server=utf8mb4_unicode_ci',
+      '--max_connections=3000'
+    ]
+    environment:
+      MYSQL_ROOT_PASSWORD: "root"
+
+---
+
+
+version: '3'
+services:
+  db:
+    environment:
+      MYSQL_ROOT_PASSWORD: "root"
+      MYSQL_USER: "root"
+      MYSQL_PASSWORD: "test"
+      MYSQL_DATABASE: "test"
+    image: "192.168.102.131:5000/mysql7"
+    restart: always
+    container_name: "mysql7"
+    volumes:
+      - "./db:/var/lib/mysql"
+      - "./conf/my.cnf:/etc/my.cnf"
+    ports:
+      - "3306:3306"
+
+
+  https://www.cnblogs.com/omgasw/p/12053986.html
+

@@ -1,12 +1,18 @@
 package com.my.web.tiger.controller;
 
 import com.my.web.tiger.entity.User;
+import com.my.web.tiger.service.UserService;
+import com.my.web.tiger.service.impl.Test.UserService1;
+import com.my.web.tiger.service.impl.UserServiceImpl;
 import com.mystarter.myjsonspringbootstarter.service.MyJsonService;
+import jdk.nashorn.internal.codegen.types.Type;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import sun.rmi.runtime.Log;
+
+import javax.annotation.Resource;
 
 /**
  * @className
@@ -20,6 +26,15 @@ import sun.rmi.runtime.Log;
 public class TigerMyStarterController {
     @Autowired
     private MyJsonService myJsonService;
+ /*   @Resource
+    private UserService userServiceImpl;
+    @Autowired
+    private UserService userServiceImpl2;*/
+
+    @Autowired
+    private UserService1 userServiceImpl;
+    @Autowired
+    private UserService userServiceImpl2;
 
     @RequestMapping(value = "tojson")
     public String getStr() {
@@ -32,6 +47,8 @@ public class TigerMyStarterController {
         log.warn("我是warn级别的日志");
         log.error("我是error级别的日志");
         log.trace("我是trace级别的日志");
+        userServiceImpl.information();
+        userServiceImpl2.information();
         return myJsonService.objToJson(user);
     }
 
