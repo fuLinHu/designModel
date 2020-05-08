@@ -1,0 +1,50 @@
+version: '3.1'
+services:
+    zoo1:
+      image: 192.168.102.132:5000/zookeeper
+      restart: always
+      container_name: zoo1
+      ports:
+        - 2181:2181
+      volumes:
+        - /opt/flh/zook/zook/z1/data:/data
+        - /opt/flh/zook/zook/z1/datalog:/datalog
+      environment:
+        ZOO_MY_ID: 1
+        ZOO_SERVERS: server.1=zoo1:2888:3888;2181 server.2=zoo2:2888:3888;2181 server.3=zoo3:2888:3888;2181
+    zoo2:
+      image: 192.168.102.132:5000/zookeeper
+      restart: always
+      container_name: zoo2
+      ports:
+        - 2182:2181
+      volumes:
+        - /opt/flh/zook/zook/z2/data:/data
+        - /opt/flh/zook/zook/z2/datalog:/datalog
+      environment:
+        ZOO_MY_ID: 2
+        ZOO_SERVERS: server.1=zoo1:2888:3888;2181 server.2=zoo2:2888:3888;2181 server.3=zoo3:2888:3888;2181
+    zoo3:
+      image: 192.168.102.132:5000/zookeeper
+      restart: always
+      container_name: zoo3
+      ports:
+        - 2183:2181
+      volumes:
+        - /opt/flh/zook/zook/z3/data:/dada
+        - /opt/flh/zook/zook/z3/datalog:/datalog
+
+      environment:
+        ZOO_MY_ID: 3
+        ZOO_SERVERS: server.1=zoo1:2888:3888;2181 server.2=zoo2:2888:3888;2181 server.3=zoo3:2888:3888;2181
+
+
+
+
+    #docker-compose up -d 后台运行
+
+    #docker-compose config 查看配置
+
+    #docker exec -it <容器id> bash 交互式进入容器
+
+    #bin/zkServer.sh status 查看zookeeper集群状态（follower/leader）
