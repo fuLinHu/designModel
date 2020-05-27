@@ -1,4 +1,4 @@
-package com.zook.module.zk;
+package com.my.zookeeper.zkclient.client;
 
 import com.sun.xml.internal.ws.util.Constants;
 import org.apache.zookeeper.*;
@@ -17,14 +17,9 @@ import java.util.concurrent.CountDownLatch;
  * @Version V1.0
  */
 public class Zookeeper {
-    public static void createZNode(String zNode) throws Exception {
-        String path = "/" + zNode;
-        String createPath = zk.create(path, null/*data*/, ZooDefs.Ids.OPEN_ACL_UNSAFE, CreateMode.PERSISTENT);
-        System.out.println(createPath);
-    }
 
     private static ZooKeeper zk;
-    private static String hostport = "192.168.102.132:2181";
+    private static String hostport = "192.168.102.137:2181";
     private static CountDownLatch connectedSemaphore = new CountDownLatch(1);
     private static Stat stat = new Stat();
 
@@ -46,10 +41,13 @@ public class Zookeeper {
             }
         });
         connectedSemaphore.await();
+        String last = createNode("flh/l", "last", CreateMode.PERSISTENT);
+        List<String> childrent = getChildrent("/flh");
+
 
         //创建持久节点
         //delete("flh");
-        doDelZnodeRecursively("/flh");
+        //doDelZnodeRecursively("/flh");
       /*  String node = createNode("flh/flhchildrent", "fu lin hu ", CreateMode.PERSISTENT);
         System.out.println(node);
         //创建持久序号节点
@@ -69,6 +67,29 @@ public class Zookeeper {
         Thread.sleep(Integer.MAX_VALUE);
     }
 
+
+    //获取子节点
+    public static List<String> getChildrent(String node) {
+        List<String> children = null;
+        try {
+            children = zk.getChildren(node, new Watcher() {
+                @Override
+                public void process(WatchedEvent watchedEvent) {
+                    System.out.println("获取子节点监听：：" + watchedEvent.toString());
+                }
+            });
+        } catch (KeeperException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        children.forEach(e -> {
+            System.out.println("获取的子节点数据：：：：" + e);
+        });
+        return children;
+    }
+
+    //创建节点的时候必须  先创建父节点 然后再创建子节点   一层一层的创建
     public static String createNode(String zNode, String obj, CreateMode createMode) throws KeeperException, InterruptedException {
 
         String path = "/" + zNode;
@@ -87,8 +108,9 @@ public class Zookeeper {
         return createPath;
 
     }
+
     //判断是否有子节点
-    public static boolean ifHaveChildrent(String path){
+    public static boolean ifHaveChildrent(String path) {
         List<String> children = null;
         try {
             children = zk.getChildren(path, false);
@@ -98,7 +120,7 @@ public class Zookeeper {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        if(children!=null&&children.size()>0){
+        if (children != null && children.size() > 0) {
             return true;
         }
         return false;
@@ -130,20 +152,20 @@ public class Zookeeper {
     //删除节点不能递归删除 要写递归方法删除
     private static void doDelZnodeRecursively(String path) {
         try {
-            List<String> childList = zk.getChildren(path,false);
+            List<String> childList = zk.getChildren(path, false);
             if (CollectionUtils.isEmpty(childList)) {
-                zk.delete(path,-1);
+                zk.delete(path, -1);
             } else {
-                for(String childName: childList) {
+                for (String childName : childList) {
                     String childPath = path + "/" + childName;
-                    List<String> grandChildList = zk.getChildren(childPath,false);
+                    List<String> grandChildList = zk.getChildren(childPath, false);
                     if (CollectionUtils.isEmpty(grandChildList)) {
-                        zk.delete(childPath,-1);
+                        zk.delete(childPath, -1);
                     } else {
                         doDelZnodeRecursively(childPath);
                     }
                 }
-                zk.delete(path,-1);
+                zk.delete(path, -1);
             }
         } catch (Exception e) {
             throw new RuntimeException("Failed to delete node recursively", e);
