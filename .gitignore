@@ -16,3 +16,4 @@ myspringmvcfirst/web/WEB-INF/classes/
 mytomcatw/src/test/
 mytomcatw/target/
 out/
+/dockerfile/dockerfile.iml

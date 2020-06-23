@@ -1,0 +1,52 @@
+
+server:
+  port: 1003
+spring:
+  application:
+    name: gateway
+  profiles:
+    active: dev
+  cloud:
+    nacos:
+      config:
+        server-addr: localhost:8848
+        file-extension: yml
+        shared-configs: common.yml #不同项目中的 公共配置文件
+        refresh-enabled: true #支持自动刷新
+        extension-configs[0]:   #扩展配置可以作为公共配置
+          dataId: commonextends.yml
+          group: commongroup
+          refresh: true
+    gateway:   #放到配置中心
+      discovery:
+        locator:
+          enabled: false #开启gateway从nacos上获取服务列表 生产不推荐  不安全
+      enabled: true #是否开启网关 m默认是
+      routes:
+        - id: consumerRoute #id必须要唯一
+          uri: lb://consumer #这里可以使用负载均衡的写法
+          predicates:
+            #- Before=2020-5-16T15:53:22.999+08:00[Asia/Shanghai]
+            #- TigerBetweenTime=上午8:00,下午11:00 #自定义的  断言  TigerBetweenTime 为 TigerBetweenTimeRoutePredicateFactory 的前缀
+            - Path=/consumerpath/**  # 如果只有- Path=/consumerpath/**，那么可以设置 lb://consumer 服务的 context-path: /consumerpath 这个时候才能访问
+            #当 配合 filters:
+            #            - StripPrefix=1 (过滤掉访问路径的 第一个前缀) 的时候可以不在  lb://consumer 服务 设置 context-path: /consumerpath
+        - id: productRoute
+          uri: lb://producer
+          predicates:
+            - Path=/producerpath/**
+          filters:
+            - StripPrefix=1
+            - AddRequestHeader=X-Request-Foo, Bar #对于所有匹配的请求，这将向下游请求的头中添加 x-request-foo:bar header
+            - TigerTimeMonitor=enable,true
+
+
+
+#        - id: productRoute #id必须要唯一
+#            uri: lb://producer #这里可以使用负载均衡的写法
+#            predicates:
+#              #- Before=2020-5-16T15:53:22.999+08:00[Asia/Shanghai]
+#              - TigerBetweenTime=上午8:00,下午11:00 #自定义的  断言  TigerBetweenTime 为 TigerBetweenTimeRoutePredicateFactory 的前缀
+#              - Path=/producerpath/**
+
+

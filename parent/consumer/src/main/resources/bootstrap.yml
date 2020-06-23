@@ -1,0 +1,31 @@
+#server:
+#  port: 1002
+#spring:
+#  cloud:
+#    nacos:
+#      config:
+#        file-extension: yaml
+#        server-addr: localhost:8848
+#      discovery:
+#        server-addr: localhost:8848
+#  application:
+#    name: producer
+#  profiles: dev
+#
+server:
+  port: 1001
+  servlet:
+    context-path: /consumerpath
+spring:
+  cloud:
+    nacos:
+      config:
+        server-addr: localhost:8848
+        file-extension: yml
+        shared-configs:  common.yml #不同项目中的 公共配置文件
+        refresh-enabled: true #支持自动刷新
+  application:
+    name: consumer
+
+  profiles:
+    active: dev

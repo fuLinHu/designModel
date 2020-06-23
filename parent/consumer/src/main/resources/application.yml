@@ -1,0 +1,32 @@
+
+#指定日志级别 配合  configuration =ProFeignConfig.class
+logging:
+  level:
+    com:
+      spring:
+        module:
+          consumer: debug #日志级别
+
+# 根据服务名称指定日志输出的多少
+
+feign:
+  client:
+    config:
+      default:
+        connectTimeout: 2000
+        readTimeout: 5000
+      producer: #服务名称
+        loggerLevel: full #日志级别 和【consumer: debug #日志级别 】 不同概念  NONE BASIC HEADERS FULL 在生产中强烈建议打印使用basic级别就ok，不要用full，日志太多影响性能
+  httpclient:
+    enabled: true #开启feign调用为httpclient httpclient底层可以设置链接池，进而提高性能我们可以通过查看Feign的底层源码看到，Feign的默认使用的URLConnection去发送请求的，他是没有连接池的。但是Feign底层除了使用URLConnection发送请求以外，还支持使用Apache的HTTPClient以及OKHTTP去发送请求，而Apache的HTTPClient以及OKHTTP都是支持连接池的
+    max-connections: 200 #最大链接数
+    max-connections-per-route: 50 #单个路径的链接数
+    connection-timeout: 5
+#feign:
+# client:
+#  config:
+#    default:
+#      connectTimeout: 2000
+#        readTimeout: 2000
+
+
