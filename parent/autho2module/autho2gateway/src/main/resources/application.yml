@@ -1,0 +1,30 @@
+#认证服务器
+server:
+  port: 1004
+#  servlet:
+#    context-path: /autho2path
+spring:
+  application:
+    name: auth-gateway-server
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848
+  datasource:
+    password: root
+    username: root
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/sso?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=UTF-8&useSSL=false
+    type: com.alibaba.druid.pool.DruidDataSource
+  redis:
+    host: 192.168.102.137
+    port: 6379
+
+
+logging:
+  level:
+    com:
+      tuling:
+        config:
+          role:
+            mapper: debug
