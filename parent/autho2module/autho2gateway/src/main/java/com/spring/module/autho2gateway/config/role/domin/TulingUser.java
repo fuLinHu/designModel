@@ -1,4 +1,4 @@
-package com.spring.module.autho2.config.role.domin;
+package com.spring.module.autho2gateway.config.role.domin;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;

@@ -1,4 +1,4 @@
-package com.tuling.config.indb;
+package com.spring.module.autho2gateway.config.indb;
 
 import com.alibaba.druid.pool.DruidDataSource;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -20,7 +20,7 @@ import javax.sql.DataSource;
  * Created by smlz on 2019/12/25.
  */
 @Configuration
-@MapperScan(basePackages = "com.tuling.config.role.mapper")
+@MapperScan(basePackages = "com.spring.module.autho2gateway.config.role.mapper")
 public class DbConfig {
 
     @ConfigurationProperties("spring.datasource")

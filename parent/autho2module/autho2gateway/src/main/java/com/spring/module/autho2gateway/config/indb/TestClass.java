@@ -1,9 +1,6 @@
-package com.spring.module.autho2.config.indb;
+package com.spring.module.autho2gateway.config.indb;
 
-import org.codehaus.jackson.map.ObjectMapper;
-import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
-import org.springframework.data.redis.serializer.JdkSerializationRedisSerializer;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -15,7 +12,7 @@ public class TestClass {
 
     public static void main(String[] args) throws IOException {
 
-        Person person = new Person(1,"张三");
+        Person person = new Person(1, "张三");
 /*
         //jdk序列化
         JdkSerializationRedisSerializer jdk = new JdkSerializationRedisSerializer();
@@ -32,7 +29,7 @@ public class TestClass {
     }
 }
 
-class Person implements Serializable{
+class Person implements Serializable {
 
     @Override
     public String toString() {
@@ -72,7 +69,7 @@ class Person implements Serializable{
         System.out.println("无参构造器");
     }
 
-    public Person(int age ,String name) {
+    public Person(int age, String name) {
         this.age = age;
         this.name = name;
         this.sex = "aaaaa";

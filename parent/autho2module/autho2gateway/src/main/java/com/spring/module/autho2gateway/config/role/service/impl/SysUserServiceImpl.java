@@ -1,10 +1,9 @@
-package com.spring.module.autho2.config.role.service.impl;
+package com.spring.module.autho2gateway.config.role.service.impl;
 
 
-
-import com.spring.module.autho2.config.role.entity.SysUser;
-import com.spring.module.autho2.config.role.mapper.SysUserMapper;
-import com.spring.module.autho2.config.role.service.ISysUserService;
+import com.spring.module.autho2gateway.config.role.entity.SysUser;
+import com.spring.module.autho2gateway.config.role.mapper.SysUserMapper;
+import com.spring.module.autho2gateway.config.role.service.ISysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

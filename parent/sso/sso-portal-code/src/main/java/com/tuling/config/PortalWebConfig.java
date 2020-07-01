@@ -19,10 +19,10 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class PortalWebConfig implements WebMvcConfigurer {
 
-/*    @Autowired
-    private LoginInterceptor loginInterceptor;*/
-
     @Autowired
+    private LoginInterceptor loginInterceptor;
+
+    //@Autowired
     private CookieLoginInterceptor cookieLoginInterceptor;
 
     @Override
@@ -32,7 +32,7 @@ public class PortalWebConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(cookieLoginInterceptor)
+        registry.addInterceptor(loginInterceptor)
                 .excludePathPatterns("/login","/logout","/home.html")
                 .addPathPatterns("/order/createOrder/**","/product/**");
 

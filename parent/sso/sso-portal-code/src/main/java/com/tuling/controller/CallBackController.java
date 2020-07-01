@@ -55,6 +55,7 @@ public class CallBackController {
         try {
             response = restTemplate.exchange(MDA.AUTH_SERVER_URL, HttpMethod.POST, httpEntity, TokenInfo.class);
         }catch (Exception e) {
+            e.printStackTrace();
             log.warn("通过授权码获取token失败:{}",code);
         }
 
@@ -64,12 +65,12 @@ public class CallBackController {
         log.info("tokenInfo:{}",tokenInfo);
 
         //session的登陆方案
-        /*request.getSession().setAttribute(MDA.TOKEN_INFO_KEY,tokenInfo.initExpireTime());*/
-        //request.getSession().setMaxInactiveInterval(10);
+        request.getSession().setAttribute(MDA.TOKEN_INFO_KEY,tokenInfo.initExpireTime());
+        request.getSession().setMaxInactiveInterval(10);
 
 
         //todo cookie的登陆方案
-        CookieUtils.writeCookie(httpServletResponse,tokenInfo);
+        //CookieUtils.writeCookie(httpServletResponse,tokenInfo);
 
 
         //根据accessToken获取用户登陆信息

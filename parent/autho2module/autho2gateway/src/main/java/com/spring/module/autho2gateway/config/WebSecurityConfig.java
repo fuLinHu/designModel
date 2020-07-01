@@ -1,4 +1,4 @@
-package com.spring.module.autho2.config;
+package com.spring.module.autho2gateway.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -17,6 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
  * @Date 2020/6/22 9:22
  * @Version V1.0
  */
+
 /**
  * @Author 付林虎
  * @Description //TODO  授权中心安全配置
@@ -27,18 +28,18 @@ import org.springframework.security.crypto.password.PasswordEncoder;
  **/
 @Configuration
 @EnableWebSecurity
-public class WebSecurityConfig  extends WebSecurityConfigurerAdapter {
+public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private MyTigerUserDetailService userDetailsService;
 
     /**
+     * @return void
      * @Author 付林虎
      * @Description //TODO 用于构建用户认证组件(AuthenticationManagerBuilder,这里典型的是一个建造者模式), 需要传递userDetailsService和密码加密器
      * @Date 2020/6/22 9:24
      * @Param [auth]
      * @Version V1.0
-     * @return void
      **/
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -51,6 +52,7 @@ public class WebSecurityConfig  extends WebSecurityConfigurerAdapter {
 
     /**
      * 密码加密器组件
+     *
      * @return
      */
     @Bean
@@ -61,6 +63,7 @@ public class WebSecurityConfig  extends WebSecurityConfigurerAdapter {
     /**
      * 上面的configure真正的构建好了我们的AuthenticationManagerBuilder 我们在这里
      * 需要通过建造者 构建我们的AuthenticationManager对象
+     *
      * @return
      * @throws Exception
      */

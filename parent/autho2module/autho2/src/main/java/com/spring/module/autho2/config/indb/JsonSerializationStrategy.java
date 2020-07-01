@@ -1,4 +1,4 @@
-package com.tuling.config.indb;
+package com.spring.module.autho2.config.indb;
 
 import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
@@ -16,13 +16,14 @@ import java.io.IOException;
 @Component
 public class JsonSerializationStrategy extends StandardStringSerializationStrategy {
 
-    private GenericJackson2JsonRedisSerializer jackson2JsonRedisSerializer= new GenericJackson2JsonRedisSerializer();
+    private GenericJackson2JsonRedisSerializer jackson2JsonRedisSerializer = new GenericJackson2JsonRedisSerializer();
+
     @Override
     protected <T> T deserializeInternal(byte[] bytes, Class<T> clazz) {
         ObjectMapper objectMapper = new ObjectMapper();
 
         try {
-            return objectMapper.readValue(bytes,clazz);
+            return objectMapper.readValue(bytes, clazz);
         } catch (IOException e) {
             e.printStackTrace();
             return null;

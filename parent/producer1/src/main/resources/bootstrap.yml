@@ -27,7 +27,7 @@ spring:
           group: commongroup
           refresh: true
   application:
-    name: producer
+    name: product-center
 
   profiles:
     active: dev

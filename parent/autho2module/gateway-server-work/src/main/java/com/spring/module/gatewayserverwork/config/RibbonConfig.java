@@ -12,7 +12,7 @@ import org.springframework.web.client.RestTemplate;
 @Configuration
 public class RibbonConfig {
 
-    @LoadBalanced
+    //@LoadBalanced
     @Bean
     public TulingRestTemplate restTemplate(DiscoveryClient discoveryClient) {
         return new TulingRestTemplate(discoveryClient);

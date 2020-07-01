@@ -27,7 +27,7 @@ import java.io.IOException;
 * @createDate: 2020/1/20 20:50
 * @version: 1.0
 */
-@Component
+/*@Component*/
 @Slf4j
 public class CookieLoginInterceptor implements HandlerInterceptor {
 

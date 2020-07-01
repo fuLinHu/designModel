@@ -1,4 +1,4 @@
-package com.spring.module.autho2.config.indb;
+package com.spring.module.autho2gateway.config.indb;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -21,7 +21,7 @@ import javax.sql.DataSource;
  */
 @Configuration
 @EnableAuthorizationServer
-public class AuthServerInDbConfig extends AuthorizationServerConfigurerAdapter  {
+public class AuthServerInDbConfig extends AuthorizationServerConfigurerAdapter {
 
     @Autowired
     private DataSource dataSource;
@@ -34,6 +34,7 @@ public class AuthServerInDbConfig extends AuthorizationServerConfigurerAdapter  
 
     /**
      * 把第三方客户端存储到db中
+     *
      * @param clients
      * @throws Exception
      */
@@ -45,12 +46,13 @@ public class AuthServerInDbConfig extends AuthorizationServerConfigurerAdapter  
 
     /**
      * 把token存储到redis中
+     *
      * @return
      */
     @Bean
     public TokenStore tokenStore() {
         //生产上 需要把token存储到redis中或者使用jwt
-        return  new RedisTokenStore(redisConnectionFactory);
+        return new RedisTokenStore(redisConnectionFactory);
 
         //return new JdbcTokenStore(dataSource);
     }
@@ -58,6 +60,7 @@ public class AuthServerInDbConfig extends AuthorizationServerConfigurerAdapter  
 
     /**
      * 根据SpringSecurity 默认的token的存储模式 改为jwt的
+     *
      * @param endpoints
      * @throws Exception
      */

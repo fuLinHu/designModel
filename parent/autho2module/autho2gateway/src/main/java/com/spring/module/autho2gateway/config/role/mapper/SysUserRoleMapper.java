@@ -1,7 +1,6 @@
-package com.spring.module.autho2.config.role.mapper;
+package com.spring.module.autho2gateway.config.role.mapper;
 
-
-import com.spring.module.autho2.config.role.entity.SysUserRole;
+import com.spring.module.autho2gateway.config.role.entity.SysUserRole;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
@@ -13,8 +12,9 @@ public interface SysUserRoleMapper {
 
     /**
      * 方法实现说明:根据用户ID查询 用户角色列别
-     * @author:smlz
+     *
      * @param userId
+     * @author:smlz
      * @return: List<SysUserRole>
      * @exception:
      * @date:2019/12/20 14:52

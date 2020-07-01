@@ -8,6 +8,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
+
 
 /**
  * Created by smlz on 2019/11/17.
@@ -23,7 +25,12 @@ public class OrderInfoController {
     @RequestMapping("/selectOrderInfoByIdAndUserName")
     public Result<OrderInfo> selectOrderInfoByIdAndUserName(@RequestBody OrderQo orderQo) {
         log.info("orderNo:{},userName:{}",orderQo.getOrderNo(),orderQo.getUserName());
-        OrderInfo orderInfo = orderInfoMapper.selectOrderInfoByIdAndUserName(orderQo.getOrderNo(),orderQo.getUserName());
+        OrderInfo orderInfo = new OrderInfo();
+        //OrderInfo orderInfo = orderInfoMapper.selectOrderInfoByIdAndUserName(orderQo.getOrderNo(),orderQo.getUserName());
+        orderInfo.setProductNo("1234567890");
+        orderInfo.setUserName("admin");
+        orderInfo.setCreateDt(new Date());
+        orderInfo.setProductCount(100);
         if(null == orderInfo) {
             return Result.fail("根据订单ID:"+orderQo.getOrderNo()+"没有查询到订单详情信息");
         }
@@ -35,7 +42,7 @@ public class OrderInfoController {
         String orderNo = String.valueOf(System.currentTimeMillis());
         orderInfo.setOrderNo(orderNo);
         log.info("保存订单:{}",orderInfo.toString());
-        orderInfoMapper.insertOrder(orderInfo);
+        //orderInfoMapper.insertOrder(orderInfo);
         return Result.success(orderNo);
     }
 

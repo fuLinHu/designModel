@@ -1,9 +1,7 @@
-package com.spring.module.autho2.config.role.service;
+package com.spring.module.autho2gateway.config.role.service;
 
 
-
-
-import com.spring.module.autho2.config.role.entity.SysPermission;
+import com.spring.module.autho2gateway.config.role.entity.SysPermission;
 
 import java.util.List;
 

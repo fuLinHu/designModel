@@ -47,6 +47,7 @@ public class LoginController {
             response = restTemplate.exchange(MDA.AUTH_SERVER_URL, HttpMethod.POST, warpRequest(userName,password), TokenInfo.class);
 
         }catch (Exception e) {
+            e.printStackTrace();
             log.error("userName:{},password:{}去认证服务器登陆异常,异常信息:{}",userName,password,e);
             return Result.fail(SystemErrorType.LOGIN_FAIL);
         }

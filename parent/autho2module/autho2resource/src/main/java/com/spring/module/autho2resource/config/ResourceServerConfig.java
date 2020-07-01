@@ -17,6 +17,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 
     /**
      * 资源服务器的标示 需要跟授权服务的配置 的资源名称一致
+     *
      * @param resources
      * @throws Exception
      */
@@ -27,6 +28,7 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 
     /**
      * 资源服务器的安全配置
+     *
      * @param http
      * @throws Exception
      */

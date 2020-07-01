@@ -25,7 +25,7 @@ public class MyTigerUserDetailService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        log.info("当前登陆用户名为:{}",username);
+        log.info("当前登陆用户名为:{}", username);
 
 
         return User.builder().username(username)

@@ -28,6 +28,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     /**
      * 资源服务器 要去资源服务器校验（token）的的bean
+     *
      * @return
      */
     @Bean
@@ -46,6 +47,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
      * 资源服务器 要去资源服务器校验的的bean  该bean会作为属性塞入到
      * OAuth2AuthenticationProcessingFilter过滤器，该过滤器就会通过AuthenticationManager
      * 中的resourceServerTokenServices组件去 认证服务器 校验我们的token。
+     *
      * @return
      */
     @Bean
@@ -68,7 +70,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return accessTokenConverter;
     }
 */
-
 
 
 }

@@ -1,7 +1,7 @@
-package com.spring.module.autho2.config.role.mapper;
+package com.spring.module.autho2gateway.config.role.mapper;
 
 
-import com.spring.module.autho2.config.role.entity.SysRolePermission;
+import com.spring.module.autho2gateway.config.role.entity.SysRolePermission;
 
 import java.util.List;
 
@@ -13,8 +13,9 @@ public interface SysRolePermissionMapper {
 
     /**
      * 方法实现说明:根据角色ID查询资源列表
-     * @author:smlz
+     *
      * @param roleIds
+     * @author:smlz
      * @return:List<SysRolePermission>
      * @exception:
      * @date:2019/12/20 15:14

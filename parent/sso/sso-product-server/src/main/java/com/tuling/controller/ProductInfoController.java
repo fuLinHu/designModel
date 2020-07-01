@@ -20,7 +20,12 @@ public class ProductInfoController {
     @RequestMapping("/selectProductInfoById/{productNo}")
     public Result<ProductInfo> selectProductInfoById(@PathVariable("productNo") String productNo) {
 
-        ProductInfo productInfo = productInfoMapper.selectProductInfoById(productNo);
+        //ProductInfo productInfo = productInfoMapper.selectProductInfoById(productNo);
+        ProductInfo productInfo = new ProductInfo();
+        productInfo.setProductName("小米手环");
+        productInfo.setProductNo("1234567890");
+        productInfo.setProductPrice(300.9);
+        productInfo.setProductStore("北京仓库");
         return Result.success(productInfo);
     }
 

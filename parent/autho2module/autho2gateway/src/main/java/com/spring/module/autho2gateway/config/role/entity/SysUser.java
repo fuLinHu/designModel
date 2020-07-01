@@ -1,4 +1,4 @@
-package com.spring.module.autho2.config.role.entity;
+package com.spring.module.autho2gateway.config.role.entity;
 
 import lombok.Data;
 

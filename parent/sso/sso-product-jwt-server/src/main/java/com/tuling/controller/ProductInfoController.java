@@ -27,7 +27,12 @@ public class ProductInfoController {
                                                      //,@RequestHeader("username") String userName,
                                                      @AuthenticationPrincipal String userName) {
         System.out.println(userName);
-        ProductInfo productInfo = productInfoMapper.selectProductInfoById(productNo);
+        //ProductInfo productInfo = productInfoMapper.selectProductInfoById(productNo);
+        ProductInfo productInfo = new ProductInfo();
+        productInfo.setProductStore("北京仓库");
+        productInfo.setProductPrice(200);
+        productInfo.setProductNo(productNo);
+        productInfo.setProductName("儿童玩具");
         return Result.success(productInfo);
     }
 

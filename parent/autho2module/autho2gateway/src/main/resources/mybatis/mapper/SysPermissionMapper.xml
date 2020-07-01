@@ -3,8 +3,9 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.spring.module.autho2.config.role.mapper.SysPermissionMapper">
-    <select id="findByIds" parameterType="list" resultType="com.spring.module.autho2.config.role.entity.SysPermission">
+<mapper namespace="com.spring.module.autho2gateway.config.role.mapper.SysPermissionMapper">
+    <select id="findByIds" parameterType="list"
+            resultType="com.spring.module.autho2gateway.config.role.entity.SysPermission">
         SELECT * FROM sys_permission WHERE id in
         <foreach collection="list" open="(" close=")" separator="," item="id">
             #{id}

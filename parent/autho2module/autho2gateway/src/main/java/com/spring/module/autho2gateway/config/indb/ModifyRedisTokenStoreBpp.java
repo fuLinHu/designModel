@@ -1,4 +1,4 @@
-package com.spring.module.autho2.config.indb;
+package com.spring.module.autho2gateway.config.indb;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeansException;
@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
  * Created by smlz on 2020/3/6.
  */
 @Slf4j
-@Component
+//@Component
 public class ModifyRedisTokenStoreBpp implements BeanPostProcessor {
 
     @Autowired
@@ -22,8 +22,8 @@ public class ModifyRedisTokenStoreBpp implements BeanPostProcessor {
     @Nullable
     @Override
     public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
-        if(bean instanceof TokenStore) {
-            log.info("beanName:{}",beanName);
+        if (bean instanceof TokenStore) {
+            log.info("beanName:{}", beanName);
             RedisTokenStore redisTokenStore = (RedisTokenStore) bean;
             redisTokenStore.setSerializationStrategy(strategy);
             return redisTokenStore;

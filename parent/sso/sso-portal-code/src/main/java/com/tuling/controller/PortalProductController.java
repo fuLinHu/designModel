@@ -37,12 +37,12 @@ public class PortalProductController {
         ModelAndView mv = new ModelAndView();
 
         //Session中获取accessToken
-/*        TokenInfo tokenInfo = (TokenInfo) request.getSession().getAttribute(TOKEN_INFO_KEY);
-        String accessToken = tokenInfo.getAccess_token();*/
+        TokenInfo tokenInfo = (TokenInfo) request.getSession().getAttribute(TOKEN_INFO_KEY);
+        String accessToken = tokenInfo.getAccess_token();
 
 
         //todo 拦截器中把accessToken存储到了请求头中
-        String accessToken = GetTokenUtils.getAccessToken(request,response);
+        //String accessToken = GetTokenUtils.getAccessToken(request,response);
 
 
 
@@ -60,6 +60,7 @@ public class PortalProductController {
             mv.setViewName("product_detail");
 
         }catch (Exception e) {
+            e.printStackTrace();
             log.error("根据商品id查询商品详情异常:{}",id);
         }
         return mv;

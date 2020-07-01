@@ -1,16 +1,16 @@
-package com.spring.module.autho2.config.role.entity;
+package com.spring.module.autho2gateway.config.role.entity;
 
 import lombok.Data;
 
 import java.io.Serializable;
 
 /**
-* @vlog: 高于生活，源于生活
-* @desc: 类的描述:角色资源映射表,一个角色可以访问多个资源,一个资源可以被多个角色访问
-* @author: smlz
-* @createDate: 2019/12/20 14:03
-* @version: 1.0
-*/
+ * @vlog: 高于生活，源于生活
+ * @desc: 类的描述:角色资源映射表,一个角色可以访问多个资源,一个资源可以被多个角色访问
+ * @author: smlz
+ * @createDate: 2019/12/20 14:03
+ * @version: 1.0
+ */
 @Data
 public class SysRolePermission implements Serializable {
 

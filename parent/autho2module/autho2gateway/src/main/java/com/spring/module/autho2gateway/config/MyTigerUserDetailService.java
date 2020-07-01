@@ -1,15 +1,14 @@
-package com.spring.module.autho2.config;
+package com.spring.module.autho2gateway.config;
 
 import com.alibaba.fastjson.JSON;
-import com.spring.module.autho2.config.role.domin.TulingUser;
-import com.spring.module.autho2.config.role.entity.SysPermission;
-import com.spring.module.autho2.config.role.entity.SysUser;
-import com.spring.module.autho2.config.role.mapper.SysUserMapper;
-import com.spring.module.autho2.config.role.service.ISysPermissionService;
+import com.spring.module.autho2gateway.config.role.domin.TulingUser;
+import com.spring.module.autho2gateway.config.role.entity.SysPermission;
+import com.spring.module.autho2gateway.config.role.entity.SysUser;
+import com.spring.module.autho2gateway.config.role.mapper.SysUserMapper;
+import com.spring.module.autho2gateway.config.role.service.ISysPermissionService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -42,15 +41,14 @@ public class MyTigerUserDetailService implements UserDetailsService {
     private ISysPermissionService sysPermissionService;
 
 
-
     @Override
     public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
 
 
         SysUser sysUser = sysUserMapper.findByUserName(userName);
 
-        if(null == sysUser) {
-            log.warn("根据用户名:{}查询用户信息为空",userName);
+        if (null == sysUser) {
+            log.warn("根据用户名:{}查询用户信息为空", userName);
             throw new UsernameNotFoundException(userName);
         }
 
@@ -63,7 +61,7 @@ public class MyTigerUserDetailService implements UserDetailsService {
             }
         }
 
-        TulingUser tulingUser = new TulingUser(sysUser.getUsername(),passwordEncoder.encode(sysUser.getPassword()),authorityList);
+        TulingUser tulingUser = new TulingUser(sysUser.getUsername(), passwordEncoder.encode(sysUser.getPassword()), authorityList);
         log.info("用户登陆成功:{}", JSON.toJSONString(tulingUser));
         return tulingUser;
     }

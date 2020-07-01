@@ -27,7 +27,7 @@ import java.time.LocalDateTime;
  * Created by smlz on 2019/12/29.
  */
 @Slf4j
-/*@Component*/
+@Component
 public class LoginInterceptor implements HandlerInterceptor {
 
     @Autowired

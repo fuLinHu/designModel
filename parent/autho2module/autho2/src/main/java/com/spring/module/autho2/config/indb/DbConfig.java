@@ -1,4 +1,4 @@
-package com.tuling.config.indb;
+package com.spring.module.autho2.config.indb;
 
 import com.alibaba.druid.pool.DruidDataSource;
 import org.springframework.beans.factory.annotation.Autowired;

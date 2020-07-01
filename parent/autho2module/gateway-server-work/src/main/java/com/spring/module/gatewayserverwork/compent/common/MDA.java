@@ -10,5 +10,5 @@ public class MDA {
 
     public static final String clientSecret = "smlz";
 
-    public static final String checkTokenUrl = "http://auth-server/oauth/check_token";
+    public static final String checkTokenUrl = "http://auth-gateway-server/oauth/check_token";
 }

@@ -1,4 +1,4 @@
-package com.spring.module.autho2.config.role.entity;
+package com.spring.module.autho2gateway.config.role.entity;
 
 import lombok.Data;
 
@@ -6,12 +6,12 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
-* @vlog: 高于生活，源于生活
-* @desc: 类的描述 角色表
-* @author: smlz
-* @createDate: 2019/12/20 13:48
-* @version: 1.0
-*/
+ * @vlog: 高于生活，源于生活
+ * @desc: 类的描述 角色表
+ * @author: smlz
+ * @createDate: 2019/12/20 13:48
+ * @version: 1.0
+ */
 @Data
 public class SysRole implements Serializable {
     private static final long serialVersionUID = -7136537864183138269L;
