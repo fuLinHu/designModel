@@ -1,0 +1,29 @@
+server:
+  port: 8866
+spring:
+  application:
+    name: vuegateway
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          lower-case-service-id: true
+          enabled: true
+      routes:
+        - id: vueuesr
+          uri: lb://vue-user
+          predicates:
+            - Path=/tigerUser/**
+        - id: order_center
+          uri: lb://order-center
+          predicates:
+            - Path=/order/**
+        - id: auth_center
+          uri: lb://auth-server
+          predicates:
+            - Path=/oauth/**,/user/**,/login/**
+    nacos:
+      discovery:
+        server-addr: localhost:8848
+  main:
+    allow-bean-definition-overriding: true

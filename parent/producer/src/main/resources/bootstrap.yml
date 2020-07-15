@@ -26,8 +26,23 @@ spring:
           dataId: commonextends.yml
           group: commongroup
           refresh: true
+    sentinel:
+      transport:
+        dashboard: localhost:9999
   application:
     name: product_center
 
   profiles:
     active: dev
+
+
+
+feign:
+ sentinel:
+  enabled: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
