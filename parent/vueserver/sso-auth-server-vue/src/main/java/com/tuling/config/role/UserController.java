@@ -3,11 +3,10 @@ package com.tuling.config.role;
 import com.tuling.config.role.domin.TulingUser;
 import com.tuling.config.role.entity.SysUser;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.security.oauth2.provider.token.TokenStore;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 
@@ -35,5 +34,7 @@ public class UserController {
         sysUser.setNickname(tulingUser.getNickName());
         return sysUser;
     }
+
+
 
 }

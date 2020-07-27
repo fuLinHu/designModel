@@ -82,6 +82,7 @@ public class AuthenticationFilter implements GlobalFilter,Ordered,InitializingBe
         shouldSkipUrl.add("/oauth/token");
         shouldSkipUrl.add("/oauth/check_token");
         shouldSkipUrl.add("/user/getCurrentUser");
+        shouldSkipUrl.add("/login");
     }
 
 }

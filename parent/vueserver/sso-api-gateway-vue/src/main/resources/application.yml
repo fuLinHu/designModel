@@ -25,7 +25,11 @@ spring:
         - id: portal-web-vue
           uri: lb://portal-web-vue
           predicates:
-            - Path=/login/**
+            - Path=/login/**,/menu/**
+        - id: vue-user
+          uri: lb://vue-user
+          predicates:
+            - Path=/tigerUser/**,/tigerPermission/**,/tigerRole/**
     nacos:
       discovery:
         server-addr: localhost:8848

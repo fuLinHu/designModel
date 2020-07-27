@@ -26,6 +26,7 @@ public class TestThreadLocal {
                     threadLocal.set(new StringBuffer().append(finalI +""));
                     StringBuffer stringBuffer = threadLocal.get();
                     System.out.println(stringBuffer.toString());
+                    threadLocal.remove();
                     countDownLatch.countDown();
                 }
 

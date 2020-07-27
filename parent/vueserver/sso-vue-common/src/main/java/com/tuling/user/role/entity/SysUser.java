@@ -1,5 +1,9 @@
-package com.tuling.config.role.entity;
+package com.tuling.user.role.entity;
 
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.extension.activerecord.Model;
+import com.tuling.page.PageRequest;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -10,8 +14,10 @@ import java.util.Date;
  * Created by smlz on 2019/12/20.
  */
 @Data
-public class SysUser implements Serializable {
+@TableName("sys_user")
+public class SysUser extends PageRequest {
 
+    @TableId
     private Integer id;
 
     private String username;

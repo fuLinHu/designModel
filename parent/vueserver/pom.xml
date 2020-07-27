@@ -15,6 +15,7 @@
     <version>1.0-SNAPSHOT</version>
     <modules>
         <module>vuegateway</module>
+        <module>vueguserserver</module>
     </modules>
 
     <properties>
@@ -43,6 +44,17 @@
         <dependency>
             <groupId>com.alibaba.cloud</groupId>
             <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-boot-starter</artifactId>
+            <version>3.0-gamma</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.hibernate.validator</groupId>
+            <artifactId>hibernate-validator</artifactId>
         </dependency>
 
         <!--<dependency>-->

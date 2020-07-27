@@ -78,6 +78,7 @@ public class AuthorizationFilter implements GlobalFilter,Ordered,InitializingBea
             //获取token信息
             tokenInfo = getTokenInfo(authHeader);
         }catch (Exception e) {
+            e.printStackTrace();
             log.warn("校验令牌异常:{}",authHeader);
             throw new GateWayException(SystemErrorType.INVALID_TOKEN);
         }

@@ -7,4 +7,9 @@
     <select id="findByUserName" resultType="com.tuling.config.role.entity.SysUser" parameterType="string">
           select * from sys_user where username=#{userName}
     </select>
+
+    <select id="selectPage"  parameterType="com.tuling.config.role.entity.SysUser">
+        select * from sys_user where username=#{userName}
+    </select>
+
 </mapper>

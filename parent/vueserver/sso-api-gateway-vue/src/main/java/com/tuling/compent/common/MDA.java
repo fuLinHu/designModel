@@ -6,9 +6,9 @@ package com.tuling.compent.common;
  */
 public class MDA {
 
-    public static final String clientId = "api-gateway";
+    public static final String clientId = "portal_app";
 
-    public static final String clientSecret = "smlz";
+    public static final String clientSecret = "portal_app";
 
-    public static final String checkTokenUrl = "http://auth-server/oauth/check_token";
+    public static final String checkTokenUrl = "http://auth-server-vue/oauth/check_token";
 }

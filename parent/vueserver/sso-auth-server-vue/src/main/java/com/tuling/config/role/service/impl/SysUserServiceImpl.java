@@ -20,4 +20,10 @@ public class SysUserServiceImpl implements ISysUserService {
     public SysUser getByUsername(String username) {
         return sysUserMapper.findByUserName(username);
     }
+
+
+
+
+
+
 }

@@ -65,7 +65,7 @@ public class Result<T> implements Serializable {
      * @return Result
      */
     public static Result success() {
-        return success(null);
+        return new Result<>(SystemErrorType.SUCCESS.getStatus(), SystemErrorType.SUCCESS.getMsg(), null);
     }
 
     /**
