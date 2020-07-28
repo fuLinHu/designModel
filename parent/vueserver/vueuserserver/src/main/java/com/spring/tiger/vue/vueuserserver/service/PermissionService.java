@@ -16,7 +16,23 @@ import java.util.List;
 public interface PermissionService {
     Page<SysPermission> findPageBy(SysPermission param);
 
+    List<SysPermission> selectAll();
+
+    List<SysPermission> gengerAllPermissionTree();
+
     List<SysPermission> findPermissionByRoleIds(List<Integer> roleIs);
 
     List<SysRolePermission> findSysRolePermissionByRoleIds(List<Integer> roleIs);
+
+    List<SysRolePermission> findSysRolePermissionByRoleId(Integer roleId);
+
+    List<SysPermission> findPermissionByRoleId(Integer roleId);
+
+    List<SysPermission> genertTree(List<SysPermission> sysPermissions);
+
+    void deletePermissionByRole(Integer roleId, Integer permissionId);
+
+    void deleteRolePermissionByRoleId(Integer roleId);
+
+    void saveRolePermissionList(List<SysRolePermission> list);
 }

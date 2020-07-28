@@ -43,20 +43,19 @@ public class TigerUserController {
 
     }
     @RequestMapping("/edit")
-    public Result<?> editUser(SysUser sysUser) {
+    public Result<?> edit(SysUser param) {
         try {
-            userService.editUser(sysUser);
+            userService.edit(param);
             return Result.success();
         }catch (Exception e){
             e.printStackTrace();
             return Result.fail();
         }
-
     }
     @RequestMapping("/save")
-    public Result<?>addUser(SysUser sysUser) {
+    public Result<?>addUser(SysUser param) {
         try {
-            userService.addUser(sysUser);
+            userService.addUser(param);
             return Result.success();
         }catch (Exception e){
             e.printStackTrace();

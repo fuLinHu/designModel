@@ -43,12 +43,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void addUser(SysUser sysUser) {
-        sysUser.setStatus(1);
-        sysUser.setCreateTime(new Date());
-        sysUser.setUpdateTime(new Date());
-//        sysUser.setCreateUser();
-        userDao.insert(sysUser);
+    public void addUser(SysUser param) {
+        param.setStatus(1);
+        param.setCreateTime(new Date());
+        param.setUpdateTime(new Date());
+        userDao.insert(param);
     }
 
     @Override
@@ -57,7 +56,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void editUser(SysUser sysUser) {
+    public void edit(SysUser sysUser) {
         userDao.updateById(sysUser);
     }
 

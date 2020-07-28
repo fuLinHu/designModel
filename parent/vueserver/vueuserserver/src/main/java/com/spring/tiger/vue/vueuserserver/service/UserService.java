@@ -19,7 +19,7 @@ public interface UserService {
 
     SysUser findById(Integer id);
 
-    void editUser(SysUser sysUser);
+    void edit(SysUser sysUser);
 
     void deleteById(Integer id);
 }
