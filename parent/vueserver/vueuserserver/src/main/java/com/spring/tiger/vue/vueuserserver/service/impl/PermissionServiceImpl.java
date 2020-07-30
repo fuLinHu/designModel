@@ -187,6 +187,29 @@ public class PermissionServiceImpl implements PermissionService {
         });
     }
 
+    @Override
+    public void deleteById(Integer id) {
+        rolePermissionDao.deleteById(id);
+    }
+
+    @Override
+    public void add(SysPermission param) {
+        param.setCreateTime(new Date());
+        param.setUpdateTime(new Date());
+        permissionDao.insert(param);
+    }
+
+    @Override
+    public void edit(SysPermission param) {
+        param.setCreateTime(new Date());
+        param.setUpdateTime(new Date());
+        permissionDao.updateById(param);
+    }
+
+    @Override
+    public SysPermission findById(Integer id) {
+        return permissionDao.selectById(id);
+    }
 
 
     public static List<SysPermission> genertTree(List<SysPermission> sysPermissions,String str){

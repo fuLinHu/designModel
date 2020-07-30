@@ -2,16 +2,12 @@ package com.spring.tiger.vue.vueuserserver.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.spring.tiger.vue.vueuserserver.dao.PermissionDao;
 import com.spring.tiger.vue.vueuserserver.dao.RoleDao;
 import com.spring.tiger.vue.vueuserserver.service.PermissionService;
 import com.spring.tiger.vue.vueuserserver.service.RoleService;
-import com.tuling.user.role.entity.SysPermission;
-import com.tuling.user.role.entity.SysRole;
-import com.tuling.user.role.entity.SysRolePermission;
-import com.tuling.user.role.entity.SysUser;
+import com.spring.tiger.vue.vueuserserver.service.UserRoleService;
+import com.tuling.user.role.entity.*;
 import com.tuling.util.HanYuPinYinUtil;
-import net.sourceforge.pinyin4j.PinyinHelper;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -33,6 +29,8 @@ public class RoleServiceImpl implements RoleService {
     private RoleDao dao;
     @Resource
     private PermissionService permissionService;
+    @Resource
+    private UserRoleService userRoleService;
     @Override
     public Page<SysRole> findPageBy(SysRole param) {
         Page<SysRole> page = new Page<SysRole>(param.getPageNum(), param.getPageSize());
@@ -94,6 +92,22 @@ public class RoleServiceImpl implements RoleService {
             });
             permissionService.saveRolePermissionList(list);
         }
+    }
+
+    @Override
+    public List<SysRole> selectAll() {
+        return dao.selectAll();
+    }
+
+    @Override
+    public void allocateRole(SysUser sysUser) {
+        Integer roleId = sysUser.getRoleId();
+        Integer id = sysUser.getId();
+        SysUserRole sysUserRole = new SysUserRole();
+        sysUserRole.setUserId(id);
+        sysUserRole.setRoleId(roleId);
+        userRoleService.delete(id,roleId);
+        userRoleService.save(sysUserRole);
     }
 
 

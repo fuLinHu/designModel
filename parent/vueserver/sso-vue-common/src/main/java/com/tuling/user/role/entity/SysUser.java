@@ -1,5 +1,6 @@
 package com.tuling.user.role.entity;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
@@ -37,5 +38,10 @@ public class SysUser extends PageRequest {
     private String updateUser;
 
     private Date updateTime;
+
+    @TableField(exist=false)
+    private Integer roleId;
+    @TableField(exist=false)
+    private String roleName;
 
 }

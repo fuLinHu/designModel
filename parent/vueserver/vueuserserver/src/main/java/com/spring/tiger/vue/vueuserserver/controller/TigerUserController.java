@@ -1,15 +1,17 @@
 package com.spring.tiger.vue.vueuserserver.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.spring.tiger.vue.vueuserserver.service.RoleService;
 import com.spring.tiger.vue.vueuserserver.service.UserService;
-import com.tuling.page.PageRequest;
+import com.tuling.user.role.entity.SysRole;
 import com.tuling.user.role.entity.SysUser;
 import com.tuling.vo.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 /**
  * @className
@@ -24,6 +26,9 @@ public class TigerUserController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private RoleService roleService;
 
     @RequestMapping("/page")
     public Result<Page<SysUser>> findPageBy(SysUser param) {
@@ -53,9 +58,9 @@ public class TigerUserController {
         }
     }
     @RequestMapping("/save")
-    public Result<?>addUser(SysUser param) {
+    public Result<?>add(SysUser param) {
         try {
-            userService.addUser(param);
+            userService.add(param);
             return Result.success();
         }catch (Exception e){
             e.printStackTrace();
@@ -84,5 +89,27 @@ public class TigerUserController {
             return Result.fail();
         }
 
+    }
+
+    @RequestMapping("/roles")
+    public Result<SysRole> findAll() {
+        try {
+            List<SysRole> param = roleService.selectAll();
+            return Result.success(param);
+        }catch (Exception e){
+            e.printStackTrace();
+            return Result.fail();
+        }
+    }
+
+    @RequestMapping("/allocateRole")
+    public Result<SysRole> allocateRole(SysUser sysUser) {
+        try {
+            roleService.allocateRole(sysUser);
+            return Result.success();
+        }catch (Exception e){
+            e.printStackTrace();
+            return Result.fail();
+        }
     }
 }

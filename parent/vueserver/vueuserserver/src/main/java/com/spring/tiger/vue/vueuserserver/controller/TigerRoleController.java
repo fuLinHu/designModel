@@ -32,6 +32,7 @@ public class TigerRoleController {
         return Result.success(pageBy);
     }
 
+
     @RequestMapping("/deleteById/{id}")
     public Result<?> deleteById(@PathVariable("id") Integer id) {
         try {

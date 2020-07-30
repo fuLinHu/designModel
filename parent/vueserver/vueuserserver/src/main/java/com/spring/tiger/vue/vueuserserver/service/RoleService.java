@@ -3,6 +3,7 @@ package com.spring.tiger.vue.vueuserserver.service;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.tuling.user.role.entity.SysPermission;
 import com.tuling.user.role.entity.SysRole;
+import com.tuling.user.role.entity.SysUser;
 
 import java.util.List;
 
@@ -29,4 +30,8 @@ public interface RoleService {
     List<SysPermission> getAllPermissionTree();
 
     void allocatePermission(Integer roleId, String permissionIds);
+
+    List<SysRole> selectAll();
+
+    void allocateRole(SysUser sysUser);
 }

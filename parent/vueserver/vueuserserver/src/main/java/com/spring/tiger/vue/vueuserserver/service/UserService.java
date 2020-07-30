@@ -15,7 +15,7 @@ public interface UserService {
 
     void editUserStatus(Integer id, Integer status);
 
-    void addUser(SysUser sysUser);
+    void add(SysUser sysUser);
 
     SysUser findById(Integer id);
 

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @className
@@ -23,6 +24,8 @@ public class UserServiceImpl implements UserService {
     @Resource
     private UserDao userDao;
 
+
+
     @Override
     public Page<SysUser> findPageBy(SysUser sysUser){
         Page<SysUser> page = new Page<SysUser>(sysUser.getPageNum(), sysUser.getPageSize());
@@ -31,6 +34,12 @@ public class UserServiceImpl implements UserService {
             queryWrapper.like("username",sysUser.getUsername());
         }
         Page<SysUser> sysUserIPage = (Page<SysUser>) userDao.selectPage(page, queryWrapper);
+        List<SysUser> records = sysUserIPage.getRecords();
+        if(records!=null&&records.size()>0){
+            records.stream().forEach(o->{
+
+            });
+        }
         return sysUserIPage;
     }
 
@@ -43,7 +52,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void addUser(SysUser param) {
+    public void add(SysUser param) {
         param.setStatus(1);
         param.setCreateTime(new Date());
         param.setUpdateTime(new Date());

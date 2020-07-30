@@ -20,7 +20,6 @@ import java.util.List;
 @Data
 @TableName("sys_role")
 public class SysRole  extends PageRequest {
-    private static final long serialVersionUID = -7136537864183138269L;
 
     @TableId
     private Integer id;
