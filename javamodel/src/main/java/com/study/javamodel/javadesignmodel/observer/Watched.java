@@ -14,6 +14,7 @@ public class Watched extends Observable{
     /*
      * 取值方法
      * */
+
     public String retrieveData(){
         return data;
     }
@@ -27,6 +28,5 @@ public class Watched extends Observable{
         }
         notifyObservers();
     }
-
 
 }

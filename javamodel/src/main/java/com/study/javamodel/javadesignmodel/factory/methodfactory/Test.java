@@ -13,9 +13,11 @@ public class Test {
         Factory factory = new AoDiFactory();
         Car factory1 = factory.createFactory();
         factory1.run();
+
         factory  = new HongQiFactory();
         factory1 =factory.createFactory();
         factory1.run();
+
         factory  = new DaZhongFactory();
         factory1 =factory.createFactory();
         factory1.run();

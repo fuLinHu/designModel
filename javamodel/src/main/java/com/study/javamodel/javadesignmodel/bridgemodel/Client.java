@@ -9,12 +9,17 @@ package com.study.javamodel.javadesignmodel.bridgemodel;
  */
 public class Client {
     public static void main(String[] args) {
-        Car car = new HongQi();
-        Bridge bridge = new MyCar(car);
-        bridge.run();
+//        Car car = new HongQi();
+//        Bridge bridge = new MyCar(car);
+//        bridge.run();
+//
+//        car =new AoDi();
+//        bridge = new MyCar(car);
+//        bridge.run();
 
-        car =new AoDi();
-        bridge = new MyCar(car);
+        Car car = new HongQi();
+        Bridge bridge = new Road(car);
+        bridge = new HighSpeed(car);
         bridge.run();
     }
 }

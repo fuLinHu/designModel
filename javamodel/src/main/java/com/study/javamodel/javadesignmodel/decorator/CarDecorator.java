@@ -8,7 +8,7 @@ package com.study.javamodel.javadesignmodel.decorator;
  * @Version V1.0
  */
 public abstract class CarDecorator implements Car {
-    private Car decorator;
+    protected Car decorator;
 
     public CarDecorator(Car decorator){
         this.decorator=decorator;

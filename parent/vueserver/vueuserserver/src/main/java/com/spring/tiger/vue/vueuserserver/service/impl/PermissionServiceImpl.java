@@ -36,6 +36,7 @@ public class PermissionServiceImpl implements PermissionService {
     public Page<SysPermission> findPageBy(SysPermission param) {
         Page<SysPermission> page = new Page<SysPermission>(param.getPageNum(), param.getPageSize());
         QueryWrapper<SysPermission> queryWrapper = new QueryWrapper<>();
+        queryWrapper.orderByDesc("create_time");
         Page<SysPermission> pageresult = (Page<SysPermission>) permissionDao.selectPage(page, queryWrapper);
         return pageresult;
     }
@@ -189,13 +190,14 @@ public class PermissionServiceImpl implements PermissionService {
 
     @Override
     public void deleteById(Integer id) {
-        rolePermissionDao.deleteById(id);
+        permissionDao.deleteById(id);
     }
 
     @Override
     public void add(SysPermission param) {
         param.setCreateTime(new Date());
         param.setUpdateTime(new Date());
+        param.setType(1);
         permissionDao.insert(param);
     }
 

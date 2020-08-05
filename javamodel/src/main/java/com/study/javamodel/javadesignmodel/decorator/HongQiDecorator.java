@@ -9,10 +9,10 @@ package com.study.javamodel.javadesignmodel.decorator;
  */
 public class HongQiDecorator extends CarDecorator {
 
-    private Car carDecorator;
+    //private Car carDecorator;
     public HongQiDecorator(Car decoratcaror) {
         super(decoratcaror);
-        this.carDecorator = decoratcaror;
+        //this.carDecorator = decoratcaror;
     }
     public void pre(){
         System.out.println("红旗汽车启动前要记着加油啊！！");
@@ -21,7 +21,7 @@ public class HongQiDecorator extends CarDecorator {
     @Override
     public void run() {
         pre();
-        carDecorator.run();
+        decorator.run();
         end();
     }
 
