@@ -1,4 +1,6 @@
-package com.study.javamodel.javaapi.SimpleDateformat;
+package javautil;
+
+import com.study.javamodel.javaapi.SimpleDateformat.ZoneIdEnum;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -8,7 +10,7 @@ import java.util.Date;
 
 /**
  * @className
- * @Description TODO
+ * @Description TODO 以下都是线程安全的
  * @Author 付林虎
  * @Date 2020/8/19 17:57
  * @Version V1.0
