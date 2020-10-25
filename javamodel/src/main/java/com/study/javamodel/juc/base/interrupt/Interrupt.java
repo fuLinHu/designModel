@@ -1,4 +1,4 @@
-package com.study.javamodel.juc.base;
+package com.study.javamodel.juc.base.interrupt;
 
 /**
  * @className

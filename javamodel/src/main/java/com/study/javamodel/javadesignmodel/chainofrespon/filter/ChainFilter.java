@@ -26,6 +26,7 @@ public class ChainFilter implements Filter{
         filters.add(filter);
         return this;
     }
+    
 
     public List<Filter> getFilters() {
         return filters;

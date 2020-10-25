@@ -1,5 +1,6 @@
 package com.study.javamodel.javadesignmodel.chainofrespon.filter;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -10,7 +11,11 @@ import java.util.List;
  * @Version V1.0
  */
 public class Client {
+    @Resource
+    private List<Filter> Filter;
+
     public static void main(String[] args) {
+
         ChainFilter chainFilter = new ChainFilter();
         ChainFilter chainFilter1 = chainFilter.addFlter(new A1()).addFlter(new A2()).addFlter(new A3());
         List<Filter> filters = chainFilter1.getFilters();

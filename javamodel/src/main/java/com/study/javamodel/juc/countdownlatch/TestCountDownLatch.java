@@ -40,10 +40,10 @@ public class TestCountDownLatch {
         try {
             //Thread.sleep(1000);
             countDownLatch.await();
-        } catch (InterruptedException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
-
+        System.out.println("最后还有---"+countDownLatch.getCount());
 
        /* executorService.submit(()->{
             log.info("运行第一个----");

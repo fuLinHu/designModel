@@ -7,6 +7,7 @@ import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.core.ResolvableType;
+import org.springframework.util.Assert;
 
 /**
  * @className
@@ -17,79 +18,10 @@ import org.springframework.core.ResolvableType;
  */
 public class SpringTest {
     public static void main(String[] args) {
-        ApplicationContext applicationContext = new AnnotationConfigApplicationContext();
+        //Assert.notNull(null, "Bean name must not be null");
+        ApplicationContext applicationContext = new AnnotationConfigApplicationContext(MainConfig.class);
 
-        BeanFactory beanFactory = new BeanFactory() {
-            @Override
-            public Object getBean(String name) throws BeansException {
-                return null;
-            }
-
-            @Override
-            public <T> T getBean(String name, Class<T> requiredType) throws BeansException {
-                return null;
-            }
-
-            @Override
-            public Object getBean(String name, Object... args) throws BeansException {
-                return null;
-            }
-
-            @Override
-            public <T> T getBean(Class<T> requiredType) throws BeansException {
-                return null;
-            }
-
-            @Override
-            public <T> T getBean(Class<T> requiredType, Object... args) throws BeansException {
-                return null;
-            }
-
-            @Override
-            public <T> ObjectProvider<T> getBeanProvider(Class<T> requiredType) {
-                return null;
-            }
-
-            @Override
-            public <T> ObjectProvider<T> getBeanProvider(ResolvableType requiredType) {
-                return null;
-            }
-
-            @Override
-            public boolean containsBean(String name) {
-                return false;
-            }
-
-            @Override
-            public boolean isSingleton(String name) throws NoSuchBeanDefinitionException {
-                return false;
-            }
-
-            @Override
-            public boolean isPrototype(String name) throws NoSuchBeanDefinitionException {
-                return false;
-            }
-
-            @Override
-            public boolean isTypeMatch(String name, ResolvableType typeToMatch) throws NoSuchBeanDefinitionException {
-                return false;
-            }
-
-            @Override
-            public boolean isTypeMatch(String name, Class<?> typeToMatch) throws NoSuchBeanDefinitionException {
-                return false;
-            }
-
-            @Override
-            public Class<?> getType(String name) throws NoSuchBeanDefinitionException {
-                return null;
-            }
-
-            @Override
-            public String[] getAliases(String name) {
-                return new String[0];
-            }
-        };
-
+//        Object student = applicationContext.getBean("student");
+//        System.out.println(student);
     }
 }

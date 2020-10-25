@@ -6,6 +6,9 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 public class Clinet {
     public static void main(String[] args) {
+
+
+
         ThreadPool threadPool = new ThreadPool(2,1000,TimeUnit.MILLISECONDS,10);
         for (int i = 0; i < 15; i++) {
             int j=i;
