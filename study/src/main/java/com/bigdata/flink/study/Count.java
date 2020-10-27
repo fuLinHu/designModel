@@ -21,6 +21,8 @@ public class Count {
     public static void main(String[] args) {
         Date date = new Date();
         System.out.println(date.getTime());
+        Date date1 = new Date(1603762365000L);
+        System.out.println(date1.toLocaleString());
     }
 
 }
