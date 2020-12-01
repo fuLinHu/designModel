@@ -1,10 +1,11 @@
 package com.my.netty.websocket.config;
 
+import ch.qos.logback.core.joran.util.beans.BeanUtil;
 import com.alibaba.fastjson.JSON;
-import com.guotu.bigdata.realtykngraph.common.resultentity.JsonResult;
-import com.guotu.bigdata.realtykngraph.util.BeanUtil;
-import com.guotu.bigdata.realtykngraph.websocket.handlermapping.NettyHandlerMapping;
-import com.guotu.bigdata.realtykngraph.websocket.handlermapping.RequestObject;
+
+import com.my.netty.websocket.entity.JsonResult;
+import com.my.netty.websocket.handlermapping.NettyHandlerMapping;
+import com.my.netty.websocket.handlermapping.RequestObject;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.*;
@@ -23,6 +24,7 @@ import io.netty.util.concurrent.GlobalEventExecutor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.util.HashMap;
@@ -41,6 +43,10 @@ import static io.netty.handler.codec.http.HttpUtil.isKeepAlive;
 @Component
 public class NettyWebSocketHandler extends SimpleChannelInboundHandler<TextWebSocketFrame> {
     private WebSocketServerHandshaker handshaker;
+    @Resource
+    private NettyHandlerMapping nettyHandlerMapping;
+    @Resource
+    private NettyServer nettyServer;
 
     //TextWebSocketFrame是netty用于处理websocket发来的文本对象
     //所有正在连接的channel都会存在这里面，所以也可以间接代表在线的客户端
@@ -110,7 +116,7 @@ public class NettyWebSocketHandler extends SimpleChannelInboundHandler<TextWebSo
 
     //发送给自己
     private void SendAllMessages(ChannelHandlerContext ctx, TextWebSocketFrame textWebSocketFrame, String path, Map paramMap) throws InstantiationException, IllegalAccessException {
-        NettyHandlerMapping nettyHandlerMapping = (NettyHandlerMapping)BeanUtil.getBeanByType(NettyHandlerMapping.class);
+        /*NettyHandlerMapping nettyHandlerMapping = (NettyHandlerMapping) BeanUtil.getBeanByType(NettyHandlerMapping.class);*/
         RequestObject requestObject = nettyHandlerMapping.handlerParam(path, paramMap);
         requestObject.setChannelHandlerContext(ctx);
         requestObject.setTextWebSocketFrame(textWebSocketFrame);
@@ -163,7 +169,6 @@ public class NettyWebSocketHandler extends SimpleChannelInboundHandler<TextWebSo
 
         log.info("remoteAddress----{}", address);
         log.info("hostAddress----{}", hostAddress);
-        NettyServer nettyServer = (NettyServer)BeanUtil.getBeanByName("nettyServer");
         int port = nettyServer.getPort();
 
         WebSocketServerHandshakerFactory wsFactory = new WebSocketServerHandshakerFactory(

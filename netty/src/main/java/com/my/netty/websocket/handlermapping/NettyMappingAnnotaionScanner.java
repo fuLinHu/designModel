@@ -1,6 +1,6 @@
 package com.my.netty.websocket.handlermapping;
 
-import com.guotu.bigdata.realtykngraph.websocket.annotation.NettyMapping;
+import com.my.netty.websocket.annotation.NettyMapping;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.stereotype.Component;

@@ -1,6 +1,7 @@
 package com.my.netty.websocket.controller;
 
-import com.guotu.bigdata.realtykngraph.websocket.annotation.NettyMapping;
+
+import com.my.netty.websocket.annotation.NettyMapping;
 
 /**
  * @className

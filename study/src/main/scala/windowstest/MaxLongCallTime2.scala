@@ -1,5 +1,7 @@
 package windowstest
 
+import java.util.Date
+
 import SensorReading.SensorReading
 import org.apache.flink.api.common.functions.ReduceFunction
 import org.apache.flink.streaming.api.TimeCharacteristic
@@ -39,11 +41,13 @@ object MaxLongCallTime2 {
       .assignTimestampsAndWatermarks(new AssignerWithPeriodicWatermarks[SensorReading] {
       var maxEventTime :Long = _
       override def getCurrentWatermark: Watermark = { //设定周期性的生成  watermark
-        new Watermark(maxEventTime - 3000l)
+       // println("getCurrentWatermark :"+(maxEventTime - 3000l))
+        new Watermark(maxEventTime - 3000l)  //迟来3000s 也就是  窗口有区间 加上  3000 触发
       }
 
       override def extractTimestamp(element: SensorReading, previousElementTimestamp: Long): Long ={ //设定 eventtime
         maxEventTime = maxEventTime.max(element.time)
+        //println("maxEventTime:"+maxEventTime)
         element.time
       }
     })
@@ -54,7 +58,7 @@ object MaxLongCallTime2 {
     //分组 开窗
     var waterMark = dataStream.keyBy(_.zb).timeWindow(Time.seconds(10),Time.seconds(5))
       .reduce(new MyReduceFunction(),new ReturnMaxtWinFunction())
-    .print("test 顺序流水线")
+    .print("test 乱序流水线")
     env.execute()
 
 
@@ -75,9 +79,9 @@ object MaxLongCallTime2 {
     override def apply(key: String, window: TimeWindow, input: Iterable[SensorReading], out: Collector[String]): Unit = {
       var value = input.iterator.next()
       var sb = new StringBuilder
-      sb.append("窗口范围：").append(window.getStart).append("---------").append(window.getEnd)
+      sb.append("窗口范围：").append(window.getStart+" ："+new Date(window.getStart).toLocaleString).append("---------").append(window.getEnd+" ："+new Date(window.getEnd).toLocaleString)
       sb.append("\n")
-      sb.append("坐标：").append(value.zb).append(" 时间：").append(value.time).append(" 温度").append(value.hot)
+      sb.append("坐标：").append(value.zb).append(" 时间：").append(value.time+" ："+new Date(window.getStart).toLocaleString).append(" 温度").append(value.hot)
       out.collect(sb.toString())
     }
   }

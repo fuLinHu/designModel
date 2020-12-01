@@ -1,9 +1,9 @@
 package com.my.netty.websocket.observer;
 
-import com.guotu.bigdata.realtykngraph.websocket.config.NettyWebSocketHandler;
-import com.guotu.bigdata.realtykngraph.websocket.handlermapping.Mapping;
-import com.guotu.bigdata.realtykngraph.websocket.handlermapping.NettyHandlerMapping;
-import com.guotu.bigdata.realtykngraph.websocket.handlermapping.RequestObject;
+import com.my.netty.websocket.config.NettyWebSocketHandler;
+import com.my.netty.websocket.handlermapping.Mapping;
+import com.my.netty.websocket.handlermapping.NettyHandlerMapping;
+import com.my.netty.websocket.handlermapping.RequestObject;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import lombok.extern.slf4j.Slf4j;

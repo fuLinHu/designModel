@@ -20,7 +20,7 @@ public class SpringTest {
     public static void main(String[] args) {
         //Assert.notNull(null, "Bean name must not be null");
         ApplicationContext applicationContext = new AnnotationConfigApplicationContext(MainConfig.class);
-
+        ((AnnotationConfigApplicationContext) applicationContext).addBeanFactoryPostProcessor(new MyBeanFactoryPostProcessor());
 //        Object student = applicationContext.getBean("student");
 //        System.out.println(student);
     }

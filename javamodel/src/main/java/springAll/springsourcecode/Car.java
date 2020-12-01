@@ -1,5 +1,6 @@
 package springAll.springsourcecode;
 
+import org.springframework.context.annotation.Conditional;
 import org.springframework.stereotype.Component;
 
 /**
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Component;
  * @Version V1.0
  */
 @Component
+@Conditional(ConditionAn.class)
 public class Car {
     private String carName;
     private Double price;
