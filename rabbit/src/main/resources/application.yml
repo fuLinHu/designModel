@@ -1,1 +1,18 @@
 
+
+spring:
+  rabbitmq:
+    port: 5672
+    host: 192.168.1.51
+    virtual-host: /springboot
+    username: fulinhu
+    password: fulinhu
+    publisher-returns: true
+    publisher-confirm-type: simple
+    listener:
+#      direct:
+#        acknowledge-mode: manual
+      simple:
+        acknowledge-mode: manual
+server:
+  port: 7777

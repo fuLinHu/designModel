@@ -1,7 +1,7 @@
 package com.forest.tiger.rabbit.topic;
 
-import com.baiqi.rabbitmq.utils.RabbitConstant;
-import com.baiqi.rabbitmq.utils.RabbitUtils;
+import com.forest.tiger.rabbit.utils.RabbitConstant;
+import com.forest.tiger.rabbit.utils.RabbitUtils;
 import com.rabbitmq.client.*;
 
 import java.io.IOException;
