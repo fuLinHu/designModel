@@ -2,6 +2,7 @@ package com.my.web.tiger.service.impl;
 
 import com.my.web.tiger.service.UserService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
 /**
@@ -13,7 +14,9 @@ import org.springframework.stereotype.Service;
  */
 @Service
 @Slf4j
+@Primary
 public class UserServiceImpl implements UserService {
+
     @Override
     public Object information() {
         String name = this.getClass().getName();

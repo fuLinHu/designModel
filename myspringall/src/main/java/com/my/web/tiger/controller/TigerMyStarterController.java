@@ -2,7 +2,6 @@ package com.my.web.tiger.controller;
 
 import com.my.web.tiger.entity.User;
 import com.my.web.tiger.service.UserService;
-import com.my.web.tiger.service.impl.Test.UserService1;
 import com.my.web.tiger.service.impl.UserServiceImpl;
 import com.mystarter.myjsonspringbootstarter.service.MyJsonService;
 import jdk.nashorn.internal.codegen.types.Type;
@@ -34,7 +33,7 @@ public class TigerMyStarterController {
     private UserService userServiceImpl2;*/
 
     @Autowired
-    private UserService1 userServiceImpl;
+    private UserService userServiceImpl;
     @Autowired
     private UserService userServiceImpl2;
 
