@@ -16,8 +16,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.Resource;
-
 /**
  * @className
  * @Description TODO
@@ -32,8 +30,7 @@ public class NettyServer {
 
     @Value("${netty.websocket.port}")
     private  int port;
-    @Resource
-    private NettyWebSocketHandler nettyWebSocketHandler;
+
 
 
 
@@ -56,7 +53,7 @@ public class NettyServer {
                             //以块的方式来写的处理器 //用于大数据的分区传输
                             ch.pipeline().addLast(new ChunkedWriteHandler());
                             ch.pipeline().addLast(new HttpObjectAggregator(8192));
-                            ch.pipeline().addLast(nettyWebSocketHandler);
+                            ch.pipeline().addLast(new NettyWebSocketHandler());
                             //ch.pipeline().addLast(new WebSocketServerProtocolHandler("/ws", null, true, 65536 * 10));
                         }
                     });

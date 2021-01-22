@@ -3,6 +3,7 @@ package com.forest.tiger.rabbit.springbootrabbit;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.impl.AMQImpl;
 import org.springframework.amqp.core.Message;
+import org.springframework.amqp.core.MessageProperties;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.boot.autoconfigure.amqp.RabbitProperties;

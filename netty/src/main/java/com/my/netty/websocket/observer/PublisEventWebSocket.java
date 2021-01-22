@@ -1,5 +1,6 @@
 package com.my.netty.websocket.observer;
 
+
 import com.my.netty.websocket.config.NettyWebSocketHandler;
 import com.my.netty.websocket.handlermapping.Mapping;
 import com.my.netty.websocket.handlermapping.NettyHandlerMapping;
@@ -11,7 +12,6 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -34,36 +34,46 @@ public class PublisEventWebSocket  {
 
     public void publisEvent(NettyWebSoketEvent nettyWebSoketEvent) throws Exception {
         try {
-            log.info(Thread.currentThread().getName());
+           /* log.info(Thread.currentThread().getName());
             List list = (List)nettyWebSoketEvent;
             Mapping mapping = nettyHandlerMapping.getMapping();
-            Map<String, RequestObject> methodMap = mapping.getMethodMap();
-            Set<Map.Entry<String, RequestObject>> entries = methodMap.entrySet();
-            for (Map.Entry<String, RequestObject> entry : entries) {
+            Map<String, Set<RequestObject>> methodMap = mapping.getMethodMap();
+            Set<Map.Entry<String, Set<RequestObject>>> entries = methodMap.entrySet();
+            for (Map.Entry<String, Set<RequestObject>> entry : entries) {
                 String key = entry.getKey();
                 if(list.contains(key)){
-                    RequestObject value = entry.getValue();
-                    ChannelHandlerContext channelHandlerContext = value.getChannelHandlerContext();
-                    TextWebSocketFrame textWebSocketFrame = value.getTextWebSocketFrame();
-                    nettyWebSocketHandler.channelRead(channelHandlerContext,textWebSocketFrame);
+                    Set<RequestObject> value = entry.getValue();
+                    for (RequestObject requestObject : value) {
+                        ChannelHandlerContext channelHandlerContext = requestObject.getChannelHandlerContext();
+                        TextWebSocketFrame textWebSocketFrame = requestObject.getTextWebSocketFrame();
+                        nettyWebSocketHandler.channelRead(channelHandlerContext,textWebSocketFrame);
+                    }
                 }
-            }
+            }*/
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public void publisEvent() throws Exception {
+    public void publisEvent(){
         try {
             log.info(Thread.currentThread().getName());
             Mapping mapping = nettyHandlerMapping.getMapping();
-            Map<String, RequestObject> methodMap = mapping.getMethodMap();
-            Set<Map.Entry<String, RequestObject>> entries = methodMap.entrySet();
-            for (Map.Entry<String, RequestObject> entry : entries) {
-                RequestObject value = entry.getValue();
-                ChannelHandlerContext channelHandlerContext = value.getChannelHandlerContext();
-                TextWebSocketFrame textWebSocketFrame = value.getTextWebSocketFrame();
-                nettyWebSocketHandler.channelRead(channelHandlerContext, textWebSocketFrame);
+            Map<String, Map<ChannelHandlerContext, RequestObject>> methodMap = mapping.getMethodMap();
+
+            Set<Map.Entry<String, Map<ChannelHandlerContext, RequestObject>>> entries = methodMap.entrySet();
+            for (Map.Entry<String,Map<ChannelHandlerContext, RequestObject>> entry : entries) {
+                Map<ChannelHandlerContext, RequestObject> value = entry.getValue();
+                for (Map.Entry<ChannelHandlerContext, RequestObject> channelHandlerContextRequestObjectEntry : value.entrySet()) {
+                    RequestObject requestObject = channelHandlerContextRequestObjectEntry.getValue();
+                    ChannelHandlerContext channelHandlerContext = requestObject.getChannelHandlerContext();
+                    if(channelHandlerContext==null){
+                        continue;
+                    }
+                    TextWebSocketFrame textWebSocketFrame = requestObject.getTextWebSocketFrame();
+                    nettyWebSocketHandler.channelRead(channelHandlerContext, textWebSocketFrame);
+                }
+
             }
         } catch (Exception e) {
             e.printStackTrace();

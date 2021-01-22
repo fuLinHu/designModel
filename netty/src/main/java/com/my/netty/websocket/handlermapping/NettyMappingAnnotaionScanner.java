@@ -55,7 +55,7 @@ public class NettyMappingAnnotaionScanner implements BeanPostProcessor {
                 if(mapping.containsPath(s)){
                     throw new RuntimeException("存在多个相同的路径："+s);
                 }
-                mapping.addMapping(s,requestObject);
+                mapping.addSourceMapping(s,requestObject);
             }
         });
         return bean;

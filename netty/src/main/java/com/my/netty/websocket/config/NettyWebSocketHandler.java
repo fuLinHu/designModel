@@ -1,11 +1,12 @@
 package com.my.netty.websocket.config;
 
-import ch.qos.logback.core.joran.util.beans.BeanUtil;
 import com.alibaba.fastjson.JSON;
 
 import com.my.netty.websocket.entity.JsonResult;
+import com.my.netty.websocket.handlermapping.Mapping;
 import com.my.netty.websocket.handlermapping.NettyHandlerMapping;
 import com.my.netty.websocket.handlermapping.RequestObject;
+import com.my.netty.websocket.util.BeanUtil;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.*;
@@ -22,9 +23,9 @@ import io.netty.util.AttributeKey;
 import io.netty.util.CharsetUtil;
 import io.netty.util.concurrent.GlobalEventExecutor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.Resource;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.util.HashMap;
@@ -43,10 +44,6 @@ import static io.netty.handler.codec.http.HttpUtil.isKeepAlive;
 @Component
 public class NettyWebSocketHandler extends SimpleChannelInboundHandler<TextWebSocketFrame> {
     private WebSocketServerHandshaker handshaker;
-    @Resource
-    private NettyHandlerMapping nettyHandlerMapping;
-    @Resource
-    private NettyServer nettyServer;
 
     //TextWebSocketFrame是netty用于处理websocket发来的文本对象
     //所有正在连接的channel都会存在这里面，所以也可以间接代表在线的客户端
@@ -70,25 +67,31 @@ public class NettyWebSocketHandler extends SimpleChannelInboundHandler<TextWebSo
             log.info("接收到的参数是："+JSON.toJSONString(paramMap));
             //如果url包含参数，需要处理
             if(uri.contains("?")){
-                String newUri=uri.substring(0,uri.indexOf("?"));
-                System.out.println(newUri);
-                request.setUri(newUri);
-                ctx.channel().attr(AttributeKey.valueOf("path")).set(newUri);
-            }else{
-                ctx.channel().attr(AttributeKey.valueOf("path")).set(uri);
+                uri=uri.substring(0,uri.indexOf("?"));
+                System.out.println(uri);
+                request.setUri(uri);
             }
+            ctx.channel().attr(AttributeKey.valueOf("path")).set(uri);
             ctx.channel().attr(AttributeKey.valueOf("param")).set(paramMap);
+            Mapping mapping = (Mapping) BeanUtil.getBeanByType(Mapping.class);
+            RequestObject requestObject = mapping.getSourceMapping(uri);
+            //获取 uri 对应的 请求
+            NettyHandlerMapping nettyHandlerMapping = (NettyHandlerMapping)BeanUtil.getBeanByType(NettyHandlerMapping.class);
+            nettyHandlerMapping.doRequestObject(requestObject,paramMap);
+            Map<ChannelHandlerContext, RequestObject> mappingRequest = mapping.getMapping(uri);
+            //链接和请求一一对应
+            mappingRequest.put(ctx,requestObject);
             handleHttpRequest(ctx,request);
         }else if(msg instanceof TextWebSocketFrame){
+            //当发送数据请求的时候执行的方法
             Object path = ctx.channel().attr(AttributeKey.valueOf("path")).get();
-            Map param = (Map)ctx.channel().attr(AttributeKey.valueOf("param")).get();
-
+            //Map param = (Map)ctx.channel().attr(AttributeKey.valueOf("param")).get();
             log.info("path-----: "+path+", "+ctx.channel().id());
             //正常的TEXT消息类型
             TextWebSocketFrame frame=(TextWebSocketFrame)msg;
             frame.retain();
             log.info("客户端收到服务器数据：" +frame.text());
-            SendAllMessages(ctx,frame,path+"",param);
+            SendAllMessages(ctx,frame,path+"");
         }
         super.channelRead(ctx, msg);
     }
@@ -104,6 +107,17 @@ public class NettyWebSocketHandler extends SimpleChannelInboundHandler<TextWebSo
 
     @Override
     public void handlerRemoved(ChannelHandlerContext ctx) throws Exception {
+        Mapping mapping = (Mapping)BeanUtil.getBeanByType(Mapping.class);
+        Map<String, Map<ChannelHandlerContext, RequestObject>> methodMap = mapping.getMethodMap();
+        if(methodMap!=null&&methodMap.size()>0){
+            for (Map.Entry<String, Map<ChannelHandlerContext, RequestObject>> stringMapEntry : methodMap.entrySet()) {
+                Map<ChannelHandlerContext, RequestObject> value = stringMapEntry.getValue();
+                if(value.containsKey(ctx)){
+                    value.remove(ctx);
+                }
+
+            }
+        }
         channelGroup.remove(ctx.channel());
         log.info(ctx.channel().remoteAddress()+"断开连接");
     }
@@ -115,18 +129,21 @@ public class NettyWebSocketHandler extends SimpleChannelInboundHandler<TextWebSo
     }
 
     //发送给自己
-    private void SendAllMessages(ChannelHandlerContext ctx, TextWebSocketFrame textWebSocketFrame, String path, Map paramMap) throws InstantiationException, IllegalAccessException {
-        /*NettyHandlerMapping nettyHandlerMapping = (NettyHandlerMapping) BeanUtil.getBeanByType(NettyHandlerMapping.class);*/
-        RequestObject requestObject = nettyHandlerMapping.handlerParam(path, paramMap);
-        requestObject.setChannelHandlerContext(ctx);
-        requestObject.setTextWebSocketFrame(textWebSocketFrame);
+    private void SendAllMessages(ChannelHandlerContext ctx, TextWebSocketFrame textWebSocketFrame, String path) {
+        NettyHandlerMapping nettyHandlerMapping = (NettyHandlerMapping)BeanUtil.getBeanByType(NettyHandlerMapping.class);
 
-        Object handler = nettyHandlerMapping.handler(path, requestObject == null ? null : requestObject.getParam());
-        JsonResult build = JsonResult.builder().data(handler).build();
-        Channel channel = ctx.channel();
-        log.info("channel id :"+channel.id());
-        channel.writeAndFlush(new TextWebSocketFrame(JSON.toJSONString(build)));
-
+        Mapping mapping = (Mapping)BeanUtil.getBeanByType(Mapping.class);
+        Map<ChannelHandlerContext, RequestObject> mappingRequest = mapping.getMapping(path);
+        if(mappingRequest.containsKey(ctx)){
+            RequestObject requestObject = mappingRequest.get(ctx);
+            requestObject.setChannelHandlerContext(ctx);
+            requestObject.setTextWebSocketFrame(textWebSocketFrame);
+            Object handler = nettyHandlerMapping.handler(requestObject, requestObject == null ? null : requestObject.getParam());
+            JsonResult build = JsonResult.builder().data(handler).build();
+            Channel channel = ctx.channel();
+            log.info("channel id :"+channel.id());
+            channel.writeAndFlush(new TextWebSocketFrame(JSON.toJSONString(build)));
+        }
     }
 
     private static Map getUrlParams(String url){
@@ -138,8 +155,15 @@ public class NettyWebSocketHandler extends SimpleChannelInboundHandler<TextWebSo
         if (url.split(";").length > 0){
             String[] arr = url.split(";")[1].split("&");
             for (String s : arr){
-                String key = s.split("=")[0];
-                String value = s.split("=")[1];
+                String[] split = StringUtils.split(s, "=");
+                String key = "";
+                String value = "";
+                if(split != null && split.length > 0){
+                    key = split[0];
+                    if(split.length > 1){
+                        value = split[1];
+                    }
+                }
                 map.put(key,value);
             }
             return  map;
@@ -169,6 +193,7 @@ public class NettyWebSocketHandler extends SimpleChannelInboundHandler<TextWebSo
 
         log.info("remoteAddress----{}", address);
         log.info("hostAddress----{}", hostAddress);
+        NettyServer nettyServer = (NettyServer)BeanUtil.getBeanByName("nettyServer");
         int port = nettyServer.getPort();
 
         WebSocketServerHandshakerFactory wsFactory = new WebSocketServerHandshakerFactory(

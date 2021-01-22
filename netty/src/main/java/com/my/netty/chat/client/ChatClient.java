@@ -5,6 +5,9 @@ import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import io.netty.handler.codec.serialization.ClassResolvers;
+import io.netty.handler.codec.serialization.ObjectDecoder;
+import io.netty.handler.codec.serialization.ObjectEncoder;
 import io.netty.handler.codec.string.StringDecoder;
 import io.netty.handler.codec.string.StringEncoder;
 
@@ -23,8 +26,10 @@ public class ChatClient {
                         @Override
                         protected void initChannel(SocketChannel ch) throws Exception {
                             ChannelPipeline pipeline = ch.pipeline();
-                            pipeline.addLast(new StringEncoder());
-                            pipeline.addLast(new StringDecoder());
+                           /* pipeline.addLast(new StringEncoder());
+                            pipeline.addLast(new StringDecoder());*/
+                            pipeline.addLast(new ObjectEncoder());
+                            pipeline.addLast(new ObjectDecoder(58, ClassResolvers.cacheDisabled(null)));
 
                             pipeline.addLast(new ChatClientHandler());
                         }
@@ -34,15 +39,16 @@ public class ChatClient {
             Channel channel = channelFuture.channel();
             System.out.println("========" + channel.localAddress() + "========");
             //客户端需要输入信息， 创建一个扫描器
-            Scanner scanner = new Scanner(System.in);
+            /*Scanner scanner = new Scanner(System.in);
             while (scanner.hasNextLine()) {
                 String msg = scanner.nextLine();
                 //通过 channel 发送到服务器端
                 channel.writeAndFlush(msg);
-            }
-            /*for (int i = 0; i < 200; i++) {
-                channel.writeAndFlush("hello，诸葛!");
             }*/
+            for (int i = 0; i < 2000; i++) {
+                channel.writeAndFlush("hello，诸葛!  "+i);
+            }
+            Thread.sleep(Integer.MAX_VALUE);
         } finally {
             group.shutdownGracefully();
         }

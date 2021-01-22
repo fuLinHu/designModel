@@ -16,7 +16,8 @@ public class TestSyclicbarrier {
         ExecutorService executorService = Executors.newFixedThreadPool(3);
         executorService.submit(()->{
             try {
-                log.info("第一个运行");
+
+
                 Thread.sleep(1000);
                 cyclicBarrier.await();
             } catch (InterruptedException e) {

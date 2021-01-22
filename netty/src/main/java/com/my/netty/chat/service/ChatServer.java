@@ -5,6 +5,9 @@ import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
+import io.netty.handler.codec.serialization.ClassResolvers;
+import io.netty.handler.codec.serialization.ObjectDecoder;
+import io.netty.handler.codec.serialization.ObjectEncoder;
 import io.netty.handler.codec.string.StringDecoder;
 import io.netty.handler.codec.string.StringEncoder;
 
@@ -23,10 +26,13 @@ public class ChatServer {
                         @Override
                         protected void initChannel(SocketChannel ch) throws Exception {
                             ChannelPipeline pipeline = ch.pipeline();
-                            //向pipeline加入解码器
+                           /* //向pipeline加入解码器
                             pipeline.addLast("decoder", new StringDecoder());
                             //向pipeline加入编码器
-                            pipeline.addLast("encoder", new StringEncoder());
+                            pipeline.addLast("encoder", new StringEncoder());*/
+
+                            pipeline.addLast(new ObjectEncoder());
+                            pipeline.addLast(new ObjectDecoder( 58,ClassResolvers.cacheDisabled(null)));
                             pipeline.addLast(new ChatServerHandler());
                             //加入自己的业务处理handler
                         }

@@ -17,6 +17,7 @@ import java.util.List;
  */
 @Data
 public class RequestObject {
+    //参数集合  有序的
     private List<Object> param;
     private ChannelHandlerContext channelHandlerContext;
     private TextWebSocketFrame textWebSocketFrame;
