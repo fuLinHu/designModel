@@ -3,8 +3,10 @@ package com.elk.demo.elasticSearch.impl;
 import com.alibaba.fastjson.JSONObject;
 import com.elk.demo.elasticSearch.ElasticSearchService;
 import com.elk.demo.elasticSearch.dao.ElasticSearchDao;
-import com.elk.demo.searchentity.MatchField;
+import com.elk.demo.searchentity.fieldparam.MatchField;
+import com.elk.demo.searchentity.fieldparam.MatchPhraseField;
 import com.elk.demo.searchentity.SearchParam;
+import com.elk.demo.searchentity.fieldparam.TermField;
 import org.elasticsearch.action.bulk.BulkResponse;
 import org.elasticsearch.action.delete.DeleteResponse;
 import org.elasticsearch.action.index.IndexResponse;
@@ -81,14 +83,15 @@ public class ElasticSearchServiceImpl implements ElasticSearchService {
         return elasticSearchDao.deleteById(indexName,id);
     }
 
+
     @Override
-    public List<JSONObject> searchTermFieldTypeText(String fieldName, Object object,boolean ifkeyword, String... indexName) {
-        return elasticSearchDao.searchTermFieldTypeText(fieldName,object,ifkeyword,indexName);
+    public List<JSONObject> searchTerm(TermField termField, String... indexName) {
+        return elasticSearchDao.searchTerm(termField,indexName);
     }
 
     @Override
-    public List<JSONObject> searchTermFieldTypeKeyword(String fieldName, Object object, String... indexName) {
-        return elasticSearchDao.searchTermFieldTypeKeyword(fieldName,object,indexName);
+    public List<JSONObject> searchTerms(TermField termField, String... indexName) {
+        return elasticSearchDao.searchTerms(termField,indexName);
     }
 
     @Override
@@ -97,8 +100,8 @@ public class ElasticSearchServiceImpl implements ElasticSearchService {
     }
 
     @Override
-    public List<JSONObject> searchMatch(String fieldName, Object objectValue, boolean ifOperatorAnd, String... indexName) {
-        return elasticSearchDao.searchMatch(fieldName,objectValue,ifOperatorAnd,indexName);
+    public List<JSONObject> searchMatch(MatchField matchField, String... indexName) {
+        return elasticSearchDao.searchMatch(matchField,indexName);
     }
 
     @Override
@@ -114,6 +117,11 @@ public class ElasticSearchServiceImpl implements ElasticSearchService {
     @Override
     public List<JSONObject> searchMustMatch(MatchField[] MatchField, String... indexName) {
         return elasticSearchDao.searchMustMatch(MatchField,indexName);
+    }
+
+    @Override
+    public List<JSONObject> searchMatchPhrase(MatchPhraseField matchPhraseField, String ... indexName) {
+        return elasticSearchDao.searchMatchPhrase(matchPhraseField,indexName);
     }
 
 }

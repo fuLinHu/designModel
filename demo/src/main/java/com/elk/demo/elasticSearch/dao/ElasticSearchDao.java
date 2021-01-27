@@ -2,11 +2,12 @@ package com.elk.demo.elasticSearch.dao;
 
 
 import com.alibaba.fastjson.JSONObject;
-import com.elk.demo.searchentity.HighlightParam;
-import com.elk.demo.searchentity.SearchPage;
-import com.elk.demo.searchentity.SearchParam;
-import com.elk.demo.searchentity.MatchField;
-import com.sun.org.apache.bcel.internal.generic.RETURN;
+import com.elk.demo.elasticSearch.factory.QueryBuilderFactory;
+import com.elk.demo.searchentity.*;
+import com.elk.demo.searchentity.fieldparam.Field;
+import com.elk.demo.searchentity.fieldparam.MatchField;
+import com.elk.demo.searchentity.fieldparam.MatchPhraseField;
+import com.elk.demo.searchentity.fieldparam.TermField;
 import lombok.extern.slf4j.Slf4j;
 import org.elasticsearch.action.ActionListener;
 import org.elasticsearch.action.bulk.BulkRequest;
@@ -17,6 +18,7 @@ import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;
+import org.elasticsearch.action.search.SearchType;
 import org.elasticsearch.action.support.IndicesOptions;
 import org.elasticsearch.action.support.master.AcknowledgedResponse;
 import org.elasticsearch.action.update.UpdateRequest;
@@ -36,6 +38,7 @@ import org.elasticsearch.index.reindex.DeleteByQueryRequest;
 import org.elasticsearch.index.reindex.UpdateByQueryRequest;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
+import org.elasticsearch.search.aggregations.bucket.filter.Filter;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
 import org.elasticsearch.search.fetch.subphase.highlight.HighlightField;
@@ -386,47 +389,45 @@ public class ElasticSearchDao {
         }
         return list;
     }
+
+
+
     /**
      * @Author 付林虎
+     * @Description //TODO   当字段类型为  text的时候是需要分词的
      * @Description //TODO   根据某个字段 精确查询（ fieldName+".keyword"  是改字段对应得全数据）  对应得字段值  是分词存储得
      * @Description //todo  如果  不带 .keyword  则搜索得 object 是 精确对应   分词后的数据
      * @Description //todo  比如  中华人民共和国  ————》》 分词以后  中华 人民  共和国
      * @Description //todo  term(fieldName+".keyword","中华人民共和国")  结果不为空，其余结果为空
      * @Description //todo  term(fieldName,"中华")  term(fieldName,"人民") term(fieldName,"共和国") 结果不为空，其余结果为空
-     * @Date 2021/1/25 10:52
-     * @Param [fieldName, object, indexName]
-     * @Version V1.0
-     * @return java.util.List<com.alibaba.fastjson.JSONObject>
-     **/
-    public List<JSONObject> searchTermFieldTypeText(String fieldName,Object object,boolean ifkeyword,String... indexName){
-        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
-        if(ifkeyword){
-            fieldName =  fieldName+".keyword";
-        }
-        QueryBuilder queryBuilder = new TermQueryBuilder(fieldName,object);
-        SearchSourceBuilder query = searchSourceBuilder.query(queryBuilder);
-        List<JSONObject> jsonObjects = searchByQuery(query, indexName);
-        return jsonObjects;
-    }
-
-
-
-    /**
-     * @Author 付林虎
-     * @Description //TODO  根据某个字段 精确查询  TypeKeyword 对应得字段值 是不分词存储
+     * @Description //todo  当字段类型是 keyword  则改字段不进行分词存储，则查询的时候 不需要添加 ".keyword"，精确查询整个字段
      * @Date 2021/1/25 13:27
      * @Param [fieldName, object, indexName]
      * @Version V1.0
      * @return java.util.List<com.alibaba.fastjson.JSONObject>
      **/
-    public List<JSONObject> searchTermFieldTypeKeyword(String fieldName,Object object,String... indexName){
+    public List<JSONObject> searchTerm(TermField termField, String... indexName){
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
-        QueryBuilder queryBuilder = new TermQueryBuilder(fieldName,object);
+        QueryBuilder queryBuilder = QueryBuilderFactory.termQueryBuilder(termField);
         SearchSourceBuilder query = searchSourceBuilder.query(queryBuilder);
         List<JSONObject> jsonObjects = searchByQuery(query, indexName);
         return jsonObjects;
     }
-
+    /**
+     * @Author 付林虎
+     * @Description //TODO  terms:{"fieldname":[]}
+     * @Date 2021/1/27 19:45
+     * @Param [termField, indexName]
+     * @Version V1.0
+     * @return java.util.List<com.alibaba.fastjson.JSONObject>
+     **/
+    public List<JSONObject> searchTerms(TermField termField, String... indexName){
+        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+        QueryBuilder queryBuilder = QueryBuilderFactory.termsQueryBuilder(termField);
+        SearchSourceBuilder query = searchSourceBuilder.query(queryBuilder);
+        List<JSONObject> jsonObjects = searchByQuery(query, indexName);
+        return jsonObjects;
+    }
 
 
     /**
@@ -455,15 +456,10 @@ public class ElasticSearchDao {
      * @Version V1.0
      * @return java.util.List<com.alibaba.fastjson.JSONObject>
      **/
-    public List<JSONObject> searchMatch(String fieldName,Object objectValue,boolean ifOperatorAnd,String ... indexName){
+    public List<JSONObject> searchMatch(MatchField matchField, String ... indexName){
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
-        MatchQueryBuilder matchQueryBuilder = new MatchQueryBuilder(fieldName,objectValue);
-        if(ifOperatorAnd){
-            matchQueryBuilder.operator(Operator.AND);
-        }
-        //后期仔细研究参数含义
-        //matchQueryBuilder.fuzziness(0);
-        searchSourceBuilder.query(matchQueryBuilder);
+        QueryBuilder queryBuilder = QueryBuilderFactory.matchQueryBuilder(matchField);
+        searchSourceBuilder.query(queryBuilder);
         List<JSONObject> jsonObjects = searchByQuery(searchSourceBuilder, indexName);
         return jsonObjects;
     }
@@ -483,6 +479,8 @@ public class ElasticSearchDao {
         List<JSONObject> list = new ArrayList<>();
         //searchRequest 是用于查询
         SearchRequest searchRequest = new SearchRequest();
+
+        if (serachParam.getSearchType()!=null&&!"".equals(serachParam.getSearchType())) searchRequest.searchType(SearchType.fromString(serachParam.getSearchType()));
 
         //查询哪些索引
         String[] indexName = serachParam.getIndexName();
@@ -669,7 +667,87 @@ public class ElasticSearchDao {
     }
 
     //==================================================================================//
+    /**
+     * @Author 付林虎
+     * @Description //TODO
+     * @Date 2021/1/26 19:21
+     * @Param [fieldName, objectValue, indexName]
+     * @Version V1.0
+     * @return java.util.List<com.alibaba.fastjson.JSONObject>
+     **/
+    public List<JSONObject> searchMatchPhrase(MatchPhraseField matchPhraseField, String ... indexName){
+        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+        QueryBuilder queryBuilder = QueryBuilderFactory.matchPhraseQueryBuilder(matchPhraseField);
+        SearchSourceBuilder query = searchSourceBuilder.query(queryBuilder);
+        List<JSONObject> jsonObjects = searchByQuery(query, SearchParam.builder().indexName(indexName).build());
+        return jsonObjects;
+    }
+    /**
+     * @Author 付林虎
+     * @Description //TODO 通配符 模糊查询 类似 mysql like 允许使用通配符*和?来进行查询 *代表0个或多个字符 ?代表任意1个字符
+     * @Description //TODO 请注意，此查询可能很慢，因为它需要迭代多个词。为了防止极慢的通配符查询，通配符术语不应该以通配符*或？之一开头。通配符查询映射到Lucene WildcardQuery
+     * @Description //TODO 如果满足你的需求，前缀匹配是优于wildcard和regexp。
+     * @Date 2021/1/27 8:44
+     * @Param [fieldName, fieldValue, indexName]
+     * @Version V1.0
+     * @return java.util.List<com.alibaba.fastjson.JSONObject>
+     **/
+    public List<JSONObject> searchWildcard(Field field , String... indexName){
+        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+        QueryBuilder queryBuilder = QueryBuilderFactory.wildcardQueryBuilder(field);
+        SearchSourceBuilder query = searchSourceBuilder.query(queryBuilder);
+        List<JSONObject> jsonObjects = searchByQuery(query, SearchParam.builder().indexName(indexName).build());
+        return jsonObjects;
+    }
 
+    /**
+     * @Author 付林虎
+     * @Description //TODO  基于词条，正则表达式查询的性能在很大程度上取决于所选的正则表达式。匹配像 .* 这样的所有内容非常慢，并且使用环绕正则表达式。
+     * @Description //TODO  如果可能，您应该在正则表达式开始之前尝试使用长前缀。像 .* ？+这样的通配符匹配器会降低性能。
+     * @Date 2021/1/27 8:58
+     * @Param [fieldName, fieldValue, indexName]
+     * @Version V1.0
+     * @return java.util.List<com.alibaba.fastjson.JSONObject>
+     **/
+    public List<JSONObject> searchRegexp(Field field ,String... indexName){
+        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+        QueryBuilder queryBuilder =  QueryBuilderFactory.regexpQueryBuilder(field);
+        SearchSourceBuilder query = searchSourceBuilder.query(queryBuilder);
+        List<JSONObject> jsonObjects = searchByQuery(query, SearchParam.builder().indexName(indexName).build());
+        return jsonObjects;
+    }
+
+    /**
+     * @Author 付林虎
+     * @Description //TODO  基于词条，前缀查询映射到Lucene PrefixQuery。
+     * @Date 2021/1/27 9:00
+     * @Param [fieldName, fieldValue, indexName]
+     * @Version V1.0
+     * @return java.util.List<com.alibaba.fastjson.JSONObject>
+     **/
+    public List<JSONObject> searchPrefix(Field field,String... indexName){
+        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+        QueryBuilder queryBuilder = QueryBuilderFactory.prefixQueryBuilder(field);
+        SearchSourceBuilder query = searchSourceBuilder.query(queryBuilder);
+        List<JSONObject> jsonObjects = searchByQuery(query, SearchParam.builder().indexName(indexName).build());
+        return jsonObjects;
+    }
+
+    /**
+     * @Author 付林虎
+     * @Description //TODO  rang
+     * @Date 2021/1/27 10:48
+     * @Param [field, indexName]
+     * @Version V1.0
+     * @return java.util.List<com.alibaba.fastjson.JSONObject>
+     **/
+    public List<JSONObject> searchRange(Field field,String... indexName){
+        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+        QueryBuilder queryBuilder = QueryBuilderFactory.rangeQueryBuilder(field);
+        SearchSourceBuilder query = searchSourceBuilder.query(queryBuilder);
+        List<JSONObject> jsonObjects = searchByQuery(query, SearchParam.builder().indexName(indexName).build());
+        return jsonObjects;
+    }
 
 
 
