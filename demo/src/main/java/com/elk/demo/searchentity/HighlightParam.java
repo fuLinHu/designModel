@@ -1,5 +1,6 @@
 package com.elk.demo.searchentity;
 
+import com.elk.demo.searchentity.enumentity.HighlighterType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -35,7 +36,16 @@ public class HighlightParam {
 
         //这些参数可以设置在全局中
 
-        //highlight 类型{@code unified}, {@code plain } and {@code fvj}.
+        //
+        /**
+         * @Author 付林虎
+         * @Description //TODO
+         * @Date 2021/1/29 9:11
+         * @Param
+         * @Version V1.0
+         * highlight 类型{@code unified}, {@code plain } and {@code fvj}.
+         * {@link HighlighterType}
+         **/
         private String highlighterType; //默认是 unified
 
         private Integer fragment_size; //突出显示的片段的大小（以字符为单位）默认为100

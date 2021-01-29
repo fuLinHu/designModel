@@ -1,5 +1,9 @@
 package com.elk.demo.searchentity;
 
+import com.elk.demo.searchentity.enumentity.SearchDataType;
+import com.elk.demo.searchentity.enumentity.SearchType;
+import com.elk.demo.searchentity.fieldparam.MatchField;
+import com.sun.istack.internal.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,24 +21,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SearchParam {
-    //是否有返回结果
-    @Builder.Default
-    private boolean fetchSource = true;
-    //查询结果包含得字段 当 includeFields 为空得时候代表全包含
-    private String[] includeFields;
-    //查询结果不包含得字段 当 excludeFields 为空得时候代表全包含
-    private String[] excludeFields ;
-    //需要搜索得索引  如果为null  代表搜索所有
-    private String[] indexName;
-    //分页查询，如果为null 则不分页
-    private SearchPage searchPage;
-    // highlightParam 为null 则没有任何字段需要高亮
-    private HighlightParam highlightParam;
-    //搜索类型
-    //query_and_fetch
-    //query_then_fetch
-    //dfs_query_and_fetch
-    //dfs_query_then_fetch
+
+    //===============SearchRequest  赋值的参数  start=========================//
+
+    //指定 路由键  根据公式 shard_num = hash(_routing) % num_primary_shards  找到对应的  分片上
+    private String[] routing;
     /**
      1、query and fetch
      向索引的所有分片（shard）都发出查询请求，各分片返回的时候把元素文档（document）和计算后的排名信息一起返回。这种搜索方式是最快的。因为相比下面的几种搜索方式，这种查询方法只需要去shard查询一次。但是各个shard返回的结果的数量之和可能是用户要求的size的n倍。
@@ -69,8 +60,61 @@ public class SearchParam {
      至于DFS是什么缩写，没有找到相关资料，这个D可能是Distributed，F可能是frequency的缩写，至于S可能是Scatter的缩写，整个单词可能是分布式词频率和文档频率散发的缩写。
      总结一下，从性能考虑QUERY_AND_FETCH是最快的，DFS_QUERY_THEN_FETCH是最慢的。从搜索的准确度来说，DFS要比非DFS的准确度更高。
      当然，更好准确性不是免费的。预查询本身会有一个额外的在shard中的轮询，这个当然会有性能上的问题（跟索引的大小，shard的数量，查询的频率等）。在大多数情形下，是没有必要的，拥有足够的数据可以解决这样的问题。但是有时候，你可能会遇到奇特的打分场景，在这些情况中，知道如何使用DFS query then fetch去进行搜索执行过程的微调还是有用的。
+     {@link SearchType}
+
      **/
     private String searchType;
 
+    //===============SearchRequest  赋值的参数 end=========================//
+
+
+
+
+    //实现的dao类型
+    @NotNull
+    private SearchDataType searchDataType;
+    //是否有返回结果
+    @Builder.Default
+    private boolean fetchSource = true;
+    //查询结果包含得字段 当 includeFields 为空得时候代表全包含
+    private String[] includeFields;
+    //查询结果不包含得字段 当 excludeFields 为空得时候代表全包含
+    private String[] excludeFields ;
+    //需要搜索得索引  如果为null  代表搜索所有
+    private String[] indexName;
+    //分页查询，如果为null 则不分页
+    private SearchPage searchPage;
+    // highlightParam 为null 则没有任何字段需要高亮
+    private HighlightParam highlightParam;
+    //需要排序的字段
+    private SortParam[] sortParam;
+    //搜索类型
+    //query_and_fetch
+    //query_then_fetch
+    //dfs_query_and_fetch
+    //dfs_query_then_fetch
+
+    /**
+     * @Author 付林虎
+     * @Description //TODO  最少匹配  同 {@link MatchField}
+     * @Date 2021/1/28 10:56
+     * @Param
+     * @Version V1.0
+     * @return
+     **/
+    private Object minimum_should_match;
+
+    /**
+     * @Author 付林虎
+     * @Description //TODO  dis_max 类型特有的参数
+     * @Date 2021/1/28 13:46
+     * @Param
+     * @Version V1.0
+     * dis_max，只是取分数最高的那个query的分数而已，完全不考虑其他query的分数，这种一刀切的做法，可能导致在有其他query的影响下，
+     * score不准确的情况，这时为了使用结果更准确，最好还是要考虑到其他query的影响
+     * tie_breaker参数的意义，将其他query的分数乘以tie_breaker，然后综合考虑后与最高分数的那个query的分数综合在一起进行计算，这样做除了取最高分以外，
+     * 还会考虑其他的query的分数。tie_breaker的值，设置在在0~1之间，是个小数就行，没有固定的值
+     **/
+    private Float tie_breaker;
 
 }

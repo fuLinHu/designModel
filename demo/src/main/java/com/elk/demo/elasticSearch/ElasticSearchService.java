@@ -1,6 +1,7 @@
 package com.elk.demo.elasticSearch;
 
 import com.alibaba.fastjson.JSONObject;
+import com.elk.demo.searchentity.fieldparam.Field;
 import com.elk.demo.searchentity.fieldparam.MatchField;
 import com.elk.demo.searchentity.fieldparam.MatchPhraseField;
 import com.elk.demo.searchentity.SearchParam;
@@ -46,19 +47,5 @@ public interface ElasticSearchService {
     DeleteResponse deleteById(String indexName, String id);
 
 
-    List<JSONObject> searchTerm(TermField termField, String... indexName);
-
-    List<JSONObject> searchTerms(TermField termField, String... indexName);
-
-    List<JSONObject> searchAll(String... indexName);
-
-    List<JSONObject> searchMatch(MatchField matchField,String ... indexName);
-
-    List<JSONObject> searchComprehensiveTest(SearchParam serachParam, String fieldName, Object objectValue, boolean ifOperatorAnd);
-
-    List<JSONObject> searchShouldMatch(MatchField[] matchFields, String... indexName);
-
-    List<JSONObject> searchMustMatch(MatchField[] MatchField,String... indexName);
-
-    List<JSONObject> searchMatchPhrase(MatchPhraseField matchPhraseField, String ... indexName);
+    List<JSONObject> search(SearchParam searchParam, Field... Field);
 }

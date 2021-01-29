@@ -1,9 +1,8 @@
 package com.elk.demo.searchentity.fieldparam;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
+import com.elk.demo.searchentity.enumentity.BoolQueryType;
+import com.elk.demo.searchentity.enumentity.FieldType;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 /**
@@ -20,4 +19,32 @@ public class Field {
     private String fieldName;
     //字段值
     private Object fieldValue;
+
+
+    /**
+     * @Author 付林虎
+     * @Description //TODO
+     * @Date 2021/1/28 9:33
+     * @Param
+     * @Version V1.0
+     * 查询类型
+     * 如果  查询类型 继承了该类 则该字段不赋值
+     * 否则需要给该字段赋值
+     * {@link com.elk.demo.searchentity.enumentity.FieldType}
+     **/
+    private FieldType fieldType;
+    /**
+     * @Author 付林虎
+     * @Description //TODO
+     * @Date 2021/1/28 10:14
+     * @Param
+     * @Version V1.0
+     * 查询类型，当为null的时候是基本查询，当不为空的时候是组合查询
+     * {@link com.elk.demo.searchentity.enumentity.BoolQueryType}
+     **/
+    private BoolQueryType boolQueryType;
+
+
+
+
 }

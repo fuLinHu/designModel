@@ -5,7 +5,7 @@ import lombok.experimental.SuperBuilder;
 
 /**
  * @className
- * @Description TODO value  可以是数组
+ * @Description TODO
  * @Author 付林虎
  * @Date 2021/1/27 9:52
  * @Version V1.0
@@ -18,6 +18,4 @@ public class TermField extends Field {
     //字段类型  映射的时候是否为keyword 类型。
     //如果是keyword类型，则查询的时候  字段名称不需要添加 .keyword  否则需要添加
     private boolean fieldTypeIfKeyWord;
-
-
 }
