@@ -2,6 +2,7 @@ package com.elk.demo.factory;
 
 import com.elk.demo.searchentity.enumentity.FieldType;
 import com.elk.demo.searchentity.fieldparam.*;
+import org.apache.lucene.search.join.ScoreMode;
 import org.elasticsearch.index.query.*;
 import org.elasticsearch.index.search.MatchQuery;
 import org.elasticsearch.indices.TermsLookup;
@@ -111,6 +112,14 @@ public class QueryBuilderFactory {
         return multiMatchQueryBuilder;
     }
 
+    private static QueryBuilder nestedQueryBuilder(Field field){
+        NestedField nestedField = (NestedField)field;
+        ScoreMode scoreMode = nestedField.getScoreMode() != null ? ScoreMode.Avg : nestedField.getScoreMode();
+        if(nestedField.getBoolQueryBuilder()==null) throw new RuntimeException("nestedQueryBuilder 构造函数 参数  QueryBuilder query 不能为空！！ ");
+        NestedQueryBuilder nestedQueryBuilder = new NestedQueryBuilder(nestedField.getPath(),nestedField.getBoolQueryBuilder(),scoreMode);
+        return nestedQueryBuilder;
+    }
+
     public static QueryBuilder getQueryBuilder(Field field){
         FieldType fieldType = field.getFieldType();
         if(field instanceof MatchField){
@@ -125,6 +134,8 @@ public class QueryBuilderFactory {
             return termQueryBuilder(field);
         }else if(field instanceof TermsField){
             return termsQueryBuilder(field);
+        }else if(field instanceof NestedField){
+            return nestedQueryBuilder(field);
         }
         else if(fieldType!=null){
             if(FieldType.PREFIX.equals(fieldType.getType())) return prefixQueryBuilder(field);

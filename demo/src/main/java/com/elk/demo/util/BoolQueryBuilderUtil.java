@@ -28,4 +28,15 @@ public class BoolQueryBuilderUtil {
             boolQueryBuilder.filter(queryBuilder);
         }
     }
+
+    public static BoolQueryBuilder evaluationBool( Field[] fields){
+        if(fields==null||fields.length<=0){
+            return null;
+        }
+        BoolQueryBuilder boolQueryBuilder = new BoolQueryBuilder();
+        for (Field field : fields) {
+            evaluationBool(boolQueryBuilder,field);
+        }
+        return boolQueryBuilder;
+    }
 }
