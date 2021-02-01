@@ -90,8 +90,8 @@ public class QueryBuilderFactory {
         RangeField rangeField = (RangeField)field;
         RangeQueryBuilder rangeQueryBuilder = new RangeQueryBuilder(field.getFieldName());
         if(rangeField.getBoost()!=null) rangeQueryBuilder.boost(rangeField.getBoost());
-        if(rangeField.getFrom()!=null) rangeQueryBuilder.from(rangeField.getFrom());
-        if(rangeField.getTo()!=null) rangeQueryBuilder.to(rangeField.getTo());
+        RangeField.FromToIfIncludeLowerUpper fromTo = rangeField.getFromTo();
+        if(fromTo!=null) rangeQueryBuilder.from(fromTo.getFrom()).to(fromTo.getTo()).includeLower(fromTo.isInclude_lower()).includeUpper(fromTo.isInclude_upper());
         if(rangeField.getGt()!=null) rangeQueryBuilder.gt(rangeField.getGt());
         if(rangeField.getGte()!=null) rangeQueryBuilder.gte(rangeField.getGte());
         if(rangeField.getLt()!=null) rangeQueryBuilder.lt(rangeField.getLt());

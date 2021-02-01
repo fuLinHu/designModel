@@ -5,10 +5,9 @@ import com.alibaba.fastjson.JSONObject;
 import com.elk.demo.elasticSearch.ElasticSearchService;
 import com.elk.demo.searchentity.*;
 import com.elk.demo.searchentity.enumentity.BoolQueryType;
+import com.elk.demo.searchentity.enumentity.FieldType;
 import com.elk.demo.searchentity.enumentity.SearchDataType;
-import com.elk.demo.searchentity.fieldparam.MatchField;
-import com.elk.demo.searchentity.fieldparam.MatchPhraseField;
-import com.elk.demo.searchentity.fieldparam.TermField;
+import com.elk.demo.searchentity.fieldparam.*;
 import org.elasticsearch.common.xcontent.XContentBuilder;
 import org.elasticsearch.common.xcontent.XContentFactory;
 import org.elasticsearch.index.query.Operator;
@@ -262,7 +261,39 @@ class DemoApplicationTests {
 
     @Test
     void contextLoads() throws Exception {
-        searchComprehensiveTest();
+        searchFilter();
+    }
+
+
+    private void searchFilter(){
+
+        RangeField age = RangeField.builder()
+                .boolQueryType(BoolQueryType.FILTER)
+                .fromTo( RangeField.FromToIfIncludeLowerUpper.builder()
+                        .from(10)
+                        .to(1006)
+                        .include_lower(true)
+                        .include_upper(true)
+                        .build()
+                )
+                .fieldName("age")
+                .build();
+        MatchField title = MatchField.builder()
+                .fieldName("title")
+                .fieldValue("1")
+                .boolQueryType(BoolQueryType.SHOULD)
+                .build();
+
+
+
+        SearchParam searchParam = SearchParam.builder()
+                .searchDataType(SearchDataType.Combined)
+                .indexName(new String[]{"foresttiger"})
+                .build();
+
+        List<JSONObject> jsonObjects = elasticSearchService.search(searchParam,new Field[]{age,title});
+        Object o = JSONArray.toJSON(jsonObjects);
+        System.out.println(o);
     }
 
     private void serchMatchPhrase(){

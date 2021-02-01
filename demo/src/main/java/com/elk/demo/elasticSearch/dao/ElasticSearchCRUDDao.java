@@ -1,14 +1,7 @@
-package com.elk.demo.elasticSearch.dao.search;
+package com.elk.demo.elasticSearch.dao;
 
 
 import com.alibaba.fastjson.JSONObject;
-import com.elk.demo.factory.QueryBuilderFactory;
-import com.elk.demo.searchentity.HighlightParam;
-import com.elk.demo.searchentity.SearchPage;
-import com.elk.demo.searchentity.SearchParam;
-import com.elk.demo.searchentity.fieldparam.Field;
-import com.elk.demo.searchentity.fieldparam.MatchField;
-import com.elk.demo.util.BoolQueryBuilderUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.elasticsearch.action.ActionListener;
 import org.elasticsearch.action.bulk.BulkRequest;
@@ -17,10 +10,6 @@ import org.elasticsearch.action.delete.DeleteRequest;
 import org.elasticsearch.action.delete.DeleteResponse;
 import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.index.IndexResponse;
-import org.elasticsearch.action.search.SearchRequest;
-import org.elasticsearch.action.search.SearchResponse;
-import org.elasticsearch.action.search.SearchType;
-import org.elasticsearch.action.support.IndicesOptions;
 import org.elasticsearch.action.support.master.AcknowledgedResponse;
 import org.elasticsearch.action.update.UpdateRequest;
 import org.elasticsearch.action.update.UpdateResponse;
@@ -30,26 +19,17 @@ import org.elasticsearch.client.indices.CreateIndexRequest;
 import org.elasticsearch.client.indices.CreateIndexResponse;
 import org.elasticsearch.client.indices.GetIndexRequest;
 import org.elasticsearch.client.indices.PutMappingRequest;
-import org.elasticsearch.common.text.Text;
 import org.elasticsearch.common.xcontent.XContentBuilder;
 import org.elasticsearch.common.xcontent.XContentType;
-import org.elasticsearch.index.query.*;
+import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.reindex.BulkByScrollResponse;
 import org.elasticsearch.index.reindex.DeleteByQueryRequest;
 import org.elasticsearch.index.reindex.UpdateByQueryRequest;
-import org.elasticsearch.search.SearchHit;
-import org.elasticsearch.search.SearchHits;
-import org.elasticsearch.search.builder.SearchSourceBuilder;
-import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
-import org.elasticsearch.search.fetch.subphase.highlight.HighlightField;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 /**
  * @className
@@ -174,6 +154,7 @@ public class ElasticSearchCRUDDao {
      **/
     public BulkResponse saveBatchDoc(String indexName,List<?> list){
         BulkRequest bulkRequest = new BulkRequest();
+
         for (Object o : list) {
             bulkRequest.add(new IndexRequest(indexName).source(JSONObject.toJSONString(o), XContentType.JSON));
             bulkRequest.timeout("10m");

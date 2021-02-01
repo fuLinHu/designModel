@@ -2,14 +2,10 @@ package com.elk.demo.elasticSearch.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.elk.demo.elasticSearch.ElasticSearchService;
-import com.elk.demo.elasticSearch.dao.search.ElasticSearchCRUDDao;
-import com.elk.demo.elasticSearch.dao.search.TermDao;
+import com.elk.demo.elasticSearch.dao.ElasticSearchCRUDDao;
 import com.elk.demo.factory.SearchDaoFactory;
-import com.elk.demo.searchentity.fieldparam.Field;
-import com.elk.demo.searchentity.fieldparam.MatchField;
-import com.elk.demo.searchentity.fieldparam.MatchPhraseField;
 import com.elk.demo.searchentity.SearchParam;
-import com.elk.demo.searchentity.fieldparam.TermField;
+import com.elk.demo.searchentity.fieldparam.Field;
 import org.elasticsearch.action.bulk.BulkResponse;
 import org.elasticsearch.action.delete.DeleteResponse;
 import org.elasticsearch.action.index.IndexResponse;
@@ -19,7 +15,6 @@ import org.elasticsearch.client.indices.CreateIndexResponse;
 import org.elasticsearch.common.xcontent.XContentBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.reindex.BulkByScrollResponse;
-import org.elasticsearch.search.sort.SortOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
