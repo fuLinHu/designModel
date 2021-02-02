@@ -39,4 +39,13 @@ public class BoolQueryBuilderUtil {
         }
         return boolQueryBuilder;
     }
+
+    public static void evaluationBool(BoolQueryBuilder boolQueryBuilder, Field[] fields){
+        if(fields==null||fields.length<=0){
+            throw new RuntimeException("fields 不能为空！");
+        }
+        for (Field field : fields) {
+            evaluationBool(boolQueryBuilder,field);
+        }
+    }
 }

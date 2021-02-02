@@ -72,7 +72,8 @@ public class SearchParam {
 
     //实现的dao类型
     @NotNull
-    private SearchDataType searchDataType;
+    @Builder.Default
+    private SearchDataType searchDataType = SearchDataType.Combined;
     //是否有返回结果
     @Builder.Default
     private boolean fetchSource = true;

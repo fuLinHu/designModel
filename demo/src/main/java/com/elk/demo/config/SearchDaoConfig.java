@@ -1,4 +1,4 @@
-package com.elk.demo.factory;
+package com.elk.demo.config;
 
 import com.elk.demo.elasticSearch.dao.search.ElasticSearchDao;
 import com.elk.demo.searchentity.SearchParam;
@@ -16,7 +16,7 @@ import java.util.Map;
  * @Version V1.0
  */
 @Component
-public class SearchDaoFactory  {
+public class SearchDaoConfig  {
     @Resource
     private Map<String, ElasticSearchDao> elasticSearchDaoMap;
 

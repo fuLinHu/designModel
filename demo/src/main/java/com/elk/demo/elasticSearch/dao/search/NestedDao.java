@@ -1,13 +1,6 @@
 package com.elk.demo.elasticSearch.dao.search;
 
-import com.alibaba.fastjson.JSONObject;
-import com.elk.demo.searchentity.SearchParam;
-import com.elk.demo.searchentity.fieldparam.Field;
-import org.elasticsearch.index.query.NestedQueryBuilder;
 import org.springframework.stereotype.Repository;
-
-import javax.annotation.Resource;
-import java.util.List;
 
 /**
  * @className
@@ -18,5 +11,6 @@ import java.util.List;
  */
 @Repository
 public class NestedDao extends ElasticSearchDao {
+
 
 }

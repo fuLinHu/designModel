@@ -1,9 +1,9 @@
 package com.elk.demo.elasticSearch.impl;
 
 import com.alibaba.fastjson.JSONObject;
+import com.elk.demo.config.SearchDaoConfig;
 import com.elk.demo.elasticSearch.ElasticSearchService;
 import com.elk.demo.elasticSearch.dao.ElasticSearchCRUDDao;
-import com.elk.demo.factory.SearchDaoFactory;
 import com.elk.demo.searchentity.SearchParam;
 import com.elk.demo.searchentity.fieldparam.Field;
 import org.elasticsearch.action.bulk.BulkResponse;
@@ -33,7 +33,7 @@ public class ElasticSearchServiceImpl implements ElasticSearchService {
     @Autowired
     private ElasticSearchCRUDDao elasticSearchCRUDDao;
     @Resource
-    private SearchDaoFactory searchDaoFactory;
+    private SearchDaoConfig searchDaoConfig;
 
 
     @Override
@@ -88,7 +88,7 @@ public class ElasticSearchServiceImpl implements ElasticSearchService {
 
     @Override
     public List<JSONObject> search(SearchParam searchParam, Field... Field) {
-        return searchDaoFactory.getElasticSearchDao(searchParam).search(searchParam,Field);
+        return searchDaoConfig.getElasticSearchDao(searchParam).search(searchParam,Field);
     }
 
 

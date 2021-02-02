@@ -24,7 +24,8 @@ public enum SearchDataType {
     Regexp(9,"regexpDao"),
     Term(10,"termDao"),
     Terms(11,"termsDao"),
-    Wildcard(12,"wildcardDao");
+    Wildcard(12,"wildcardDao"),
+    Nested(13,"nestedDao");
 
 
     private String type;

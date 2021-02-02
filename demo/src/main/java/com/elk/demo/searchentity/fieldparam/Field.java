@@ -2,6 +2,7 @@ package com.elk.demo.searchentity.fieldparam;
 
 import com.elk.demo.searchentity.enumentity.BoolQueryType;
 import com.elk.demo.searchentity.enumentity.FieldType;
+import lombok.Builder;
 import lombok.Data;
 import lombok.experimental.SuperBuilder;
 
@@ -42,7 +43,8 @@ public class Field {
      * 查询类型，当为null的时候是基本查询，当不为空的时候是组合查询
      * {@link com.elk.demo.searchentity.enumentity.BoolQueryType}
      **/
-    private BoolQueryType boolQueryType;
+    @Builder.Default
+    private BoolQueryType boolQueryType = BoolQueryType.SHOULD;
 
 
 

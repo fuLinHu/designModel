@@ -20,6 +20,8 @@ import java.util.List;
 
 public class QueryBuilderFactory {
 
+
+
     private static QueryBuilder prefixQueryBuilder(Field field){
         PrefixQueryBuilder queryBuilder = new PrefixQueryBuilder(field.getFieldName(),field.getFieldValue()+"");
         return queryBuilder;
@@ -114,11 +116,15 @@ public class QueryBuilderFactory {
 
     private static QueryBuilder nestedQueryBuilder(Field field){
         NestedField nestedField = (NestedField)field;
-        ScoreMode scoreMode = nestedField.getScoreMode() != null ? ScoreMode.Avg : nestedField.getScoreMode();
+        ScoreMode scoreMode = nestedField.getScoreMode() == null ? ScoreMode.Avg : nestedField.getScoreMode();
         if(nestedField.getBoolQueryBuilder()==null) throw new RuntimeException("nestedQueryBuilder 构造函数 参数  QueryBuilder query 不能为空！！ ");
         NestedQueryBuilder nestedQueryBuilder = new NestedQueryBuilder(nestedField.getPath(),nestedField.getBoolQueryBuilder(),scoreMode);
         return nestedQueryBuilder;
     }
+
+
+
+    //-------------------该方法要修改，如果新增 一种查询！---------------------//
 
     public static QueryBuilder getQueryBuilder(Field field){
         FieldType fieldType = field.getFieldType();

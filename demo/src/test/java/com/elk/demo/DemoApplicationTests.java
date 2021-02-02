@@ -8,8 +8,10 @@ import com.elk.demo.searchentity.enumentity.BoolQueryType;
 import com.elk.demo.searchentity.enumentity.FieldType;
 import com.elk.demo.searchentity.enumentity.SearchDataType;
 import com.elk.demo.searchentity.fieldparam.*;
+import com.elk.demo.util.BoolQueryBuilderUtil;
 import org.elasticsearch.common.xcontent.XContentBuilder;
 import org.elasticsearch.common.xcontent.XContentFactory;
+import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.Operator;
 import org.elasticsearch.index.query.TermQueryBuilder;
 import org.junit.jupiter.api.Test;
@@ -29,7 +31,7 @@ class DemoApplicationTests {
     @Resource
     private ElasticSearchService elasticSearchService;
 
-    private String indexname = "foresttiger";
+    private String indexname = "foresttiger1";
 
 
 
@@ -86,12 +88,16 @@ class DemoApplicationTests {
 
     private void save(){
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put("name","tiger6");
-        jsonObject.put("title","百度一下");
-        jsonObject.put("age",1006);
+        jsonObject.put("name","tiger");
+        jsonObject.put("title","中国建国100周年");
+        jsonObject.put("age",23);
         jsonObject.put("birthday",new Date());
-        jsonObject.put("heigh",135.6);
-        jsonObject.put("message","this is a test");
+        jsonObject.put("heigh",176);
+        jsonObject.put("message","习主席做出重要讲话");
+        JSONObject com = new JSONObject();
+        com.put("age",24);
+        com.put("name","王老五");
+        jsonObject.put("comment",com);
         elasticSearchService.saveDoc(indexname,jsonObject);
     }
 
@@ -106,6 +112,12 @@ class DemoApplicationTests {
         elasticSearchService.saveBatchDoc(indexname,list);
     }
 
+    @Test
+    void contextLoads() throws Exception {
+        Nested();
+    }
+
+
     private void createMapping(){
         try {
             XContentBuilder builder = XContentFactory.jsonBuilder();
@@ -114,6 +126,18 @@ class DemoApplicationTests {
             xContentBuilder = xContentBuilder.startObject("age").field("type","integer").field("index", true).endObject();
             xContentBuilder = xContentBuilder.startObject("birthday").field("type", "date").field("format", "yyyy-MM-dd HH:mm:ss||yyyy-MM-dd||epoch_millis").endObject();
             xContentBuilder = xContentBuilder.startObject("heigh").field("type", "double").field("index", true).endObject();
+            xContentBuilder = xContentBuilder.startObject("comment").field("type","nested")
+                                .startObject("properties")
+                                    .startObject("name")
+                                        .field("type","text")
+                                        .field("analyzer","ik_max_word")
+                                    .endObject()
+                                    .startObject("age")
+                                        .field("type","integer")
+                                    .endObject()
+                                .endObject()
+                             .endObject();
+
             xContentBuilder.endObject().endObject();
             boolean foresttiger = elasticSearchService.checkIndex(indexname);
             if(!foresttiger){
@@ -259,10 +283,6 @@ class DemoApplicationTests {
         System.out.println(o);
     }
 
-    @Test
-    void contextLoads() throws Exception {
-        searchFilter();
-    }
 
 
     private void searchFilter(){
@@ -309,6 +329,43 @@ class DemoApplicationTests {
                 .build();
 
         List<JSONObject> jsonObjects = elasticSearchService.search(searchParam,field);
+        Object o = JSONArray.toJSON(jsonObjects);
+        System.out.println(o);
+    }
+
+    private void Nested(){
+        SearchParam searchParam = SearchParam.builder()
+                .indexName(new String[]{indexname})
+                .build();
+
+        MatchField heigh = MatchField.builder()
+                .fieldName("heigh")
+                .fieldValue(166)
+                .boolQueryType(BoolQueryType.SHOULD)
+                .build();
+
+
+        MatchField name = MatchField.builder()
+                .fieldName("comment.name")
+                .fieldValue("付林虎")
+                .boolQueryType(BoolQueryType.MUST)
+                .build();
+        MatchField age = MatchField.builder()
+                .fieldName("comment.age")
+                .boolQueryType(BoolQueryType.MUST)
+                .fieldValue(24)
+                .build();
+        BoolQueryBuilder boolQueryBuilder = BoolQueryBuilderUtil.evaluationBool(new Field[]{name, age});
+
+
+        NestedField comment = NestedField.builder()
+                .boolQueryBuilder(boolQueryBuilder)
+                .path("comment")
+                .boolQueryType(BoolQueryType.SHOULD)
+                .build();
+
+
+        List<JSONObject> jsonObjects = elasticSearchService.search(searchParam,new Field[]{heigh,comment});
         Object o = JSONArray.toJSON(jsonObjects);
         System.out.println(o);
     }
