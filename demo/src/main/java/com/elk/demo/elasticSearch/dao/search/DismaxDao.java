@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.elk.demo.factory.QueryBuilderFactory;
 import com.elk.demo.searchentity.SearchParam;
 import com.elk.demo.searchentity.fieldparam.Field;
+import com.elk.demo.searchentity.result.SearchResult;
 import org.elasticsearch.index.query.DisMaxQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
@@ -30,7 +31,7 @@ public class DismaxDao extends ElasticSearchDao{
      * @return java.util.List<com.alibaba.fastjson.JSONObject>
      **/
     @Override
-    public List<JSONObject> search(SearchParam searchParam , Field...fields){
+    public SearchResult search(SearchParam searchParam , Field...fields){
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
         DisMaxQueryBuilder disMaxQueryBuilder = QueryBuilders.disMaxQuery();
         if(searchParam.getTie_breaker()!=null) disMaxQueryBuilder.tieBreaker(searchParam.getTie_breaker());
@@ -41,7 +42,6 @@ public class DismaxDao extends ElasticSearchDao{
             }
         }
         SearchSourceBuilder query = searchSourceBuilder.query(disMaxQueryBuilder);
-        List<JSONObject> jsonObjects = searchByQuery(query, searchParam);
-        return jsonObjects;
+        return searchByQuery(query, searchParam);
     }
 }

@@ -3,11 +3,14 @@ package com.elk.demo;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.elk.demo.elasticSearch.ElasticSearchService;
+import com.elk.demo.elasticSearch.dao.AggregationsDao;
 import com.elk.demo.searchentity.*;
+import com.elk.demo.searchentity.agg.AvgAggField;
 import com.elk.demo.searchentity.enumentity.BoolQueryType;
 import com.elk.demo.searchentity.enumentity.FieldType;
 import com.elk.demo.searchentity.enumentity.SearchDataType;
 import com.elk.demo.searchentity.fieldparam.*;
+import com.elk.demo.searchentity.result.SearchResult;
 import com.elk.demo.util.BoolQueryBuilderUtil;
 import org.elasticsearch.common.xcontent.XContentBuilder;
 import org.elasticsearch.common.xcontent.XContentFactory;
@@ -32,6 +35,8 @@ class DemoApplicationTests {
     private ElasticSearchService elasticSearchService;
 
     private String indexname = "foresttiger1";
+    @Resource
+    private AggregationsDao  aggregationsDao;
 
 
 
@@ -112,12 +117,6 @@ class DemoApplicationTests {
         elasticSearchService.saveBatchDoc(indexname,list);
     }
 
-    @Test
-    void contextLoads() throws Exception {
-        Nested();
-    }
-
-
     private void createMapping(){
         try {
             XContentBuilder builder = XContentFactory.jsonBuilder();
@@ -160,9 +159,11 @@ class DemoApplicationTests {
                 .build();
 
 
-        List<JSONObject> jsonObjects = elasticSearchService.search(searchParam,field);
-        Object o = JSONArray.toJSON(jsonObjects);
-        System.out.println(o);
+        SearchResult search = elasticSearchService.search(searchParam,field);
+        if(search!=null){
+            Object o = JSONArray.toJSON(search.getSearchResult());
+            System.out.println(o);
+        }
     }
 
     private void searchTermFieldTypeKeyword(){
@@ -177,9 +178,11 @@ class DemoApplicationTests {
                 .indexName(new String[]{"foresttiger"})
                 .build();
 
-        List<JSONObject> jsonObjects = elasticSearchService.search(searchParam,field);
-        Object o = JSONArray.toJSON(jsonObjects);
-        System.out.println(o);
+        SearchResult search = elasticSearchService.search(searchParam,field);
+        if(search!=null){
+            Object o = JSONArray.toJSON(search.getSearchResult());
+            System.out.println(o);
+        }
     }
 
 
@@ -195,9 +198,11 @@ class DemoApplicationTests {
                 .indexName(new String[]{"foresttiger"})
                 .build();
 
-        List<JSONObject> jsonObjects = elasticSearchService.search(searchParam,field);
-        Object o = JSONArray.toJSON(jsonObjects);
-        System.out.println(o);
+        SearchResult search = elasticSearchService.search(searchParam,field);
+        if(search!=null){
+            Object o = JSONArray.toJSON(search.getSearchResult());
+            System.out.println(o);
+        }
     }
 
 
@@ -232,9 +237,11 @@ class DemoApplicationTests {
                 .boolQueryType(BoolQueryType.FILTER)
                 .build();
 
-        List<JSONObject> jsonObjects = elasticSearchService.search(searchParam,build1);
-        Object o = JSONArray.toJSON(jsonObjects);
-        System.out.println(o);
+        SearchResult search = elasticSearchService.search(searchParam,build1);
+        if(search!=null){
+            Object o = JSONArray.toJSON(search.getSearchResult());
+            System.out.println(o);
+        }
     }
 
     private void searchShouldMatch(){
@@ -254,9 +261,11 @@ class DemoApplicationTests {
                 .searchDataType(SearchDataType.Combined)
                 .build();
 
-        List<JSONObject> jsonObjects = elasticSearchService.search(build2,new MatchField[]{build1, build});
-        Object o = JSONArray.toJSON(jsonObjects);
-        System.out.println(o);
+        SearchResult search = elasticSearchService.search(build2,new MatchField[]{build1, build});
+        if(search!=null){
+            Object o = JSONArray.toJSON(search.getSearchResult());
+            System.out.println(o);
+        }
     }
 
     private void searchMustMatch(){
@@ -278,9 +287,11 @@ class DemoApplicationTests {
                 .searchDataType(SearchDataType.Combined)
                 .build();
 
-        List<JSONObject> jsonObjects = elasticSearchService.search(build2,new MatchField[]{build1, build});
-        Object o = JSONArray.toJSON(jsonObjects);
-        System.out.println(o);
+        SearchResult search = elasticSearchService.search(build2,new MatchField[]{build1, build});
+        if(search!=null){
+            Object o = JSONArray.toJSON(search.getSearchResult());
+            System.out.println(o);
+        }
     }
 
 
@@ -311,9 +322,12 @@ class DemoApplicationTests {
                 .indexName(new String[]{"foresttiger"})
                 .build();
 
-        List<JSONObject> jsonObjects = elasticSearchService.search(searchParam,new Field[]{age,title});
-        Object o = JSONArray.toJSON(jsonObjects);
-        System.out.println(o);
+        SearchResult search = elasticSearchService.search(searchParam, new Field[]{age, title});
+
+        if(search!=null){
+            Object o = JSONArray.toJSON(search.getSearchResult());
+            System.out.println(o);
+        }
     }
 
     private void serchMatchPhrase(){
@@ -328,9 +342,11 @@ class DemoApplicationTests {
                 .indexName(new String[]{"foresttiger"})
                 .build();
 
-        List<JSONObject> jsonObjects = elasticSearchService.search(searchParam,field);
-        Object o = JSONArray.toJSON(jsonObjects);
-        System.out.println(o);
+        SearchResult search = elasticSearchService.search(searchParam,field);
+        if(search!=null){
+            Object o = JSONArray.toJSON(search.getSearchResult());
+            System.out.println(o);
+        }
     }
 
     private void Nested(){
@@ -365,11 +381,36 @@ class DemoApplicationTests {
                 .build();
 
 
-        List<JSONObject> jsonObjects = elasticSearchService.search(searchParam,new Field[]{heigh,comment});
-        Object o = JSONArray.toJSON(jsonObjects);
-        System.out.println(o);
+        SearchResult search = elasticSearchService.search(searchParam, new Field[]{heigh, comment});
+        if(search!=null){
+            Object o = JSONArray.toJSON(search.getSearchResult());
+            System.out.println(o);
+        }
+    }
+    @Test
+    void contextLoads() throws Exception {
+        avgAgg();
     }
 
+    private void avgAgg(){
+        SearchParam searchParam = SearchParam.builder()
+                .indexName(new String[]{indexname})
+                .build();
+        AvgAggField build = AvgAggField.builder()
+                .fieldName("heigh")
+                .groupName("heigh_groupy")
+                .build();
+        SearchResult searchResult = aggregationsDao.avgAggs(searchParam, build);
+        parse(searchResult);
+    }
+
+    private void parse(SearchResult searchResult){
+        if(searchResult!=null){
+            Object o = JSONArray.toJSON(searchResult.getSearchResult());
+            System.out.println(o);
+            System.out.println(searchResult.getAggResult());
+        }
+    }
 
 
 

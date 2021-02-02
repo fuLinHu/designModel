@@ -41,7 +41,7 @@ public class HighlighteUtil {
         }
     }
 
-    public static void parseHighLightParamToSearch(SearchParam serachParam, SearchSourceBuilder searchSourceBuilder){
+    public static void paddingHighLightParamToSearch(SearchParam serachParam, SearchSourceBuilder searchSourceBuilder){
         HighlightParam highlightParam = serachParam.getHighlightParam();
         if(highlightParam!=null){
             HighlightBuilder highlightBuilder = new HighlightBuilder();

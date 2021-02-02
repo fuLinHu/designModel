@@ -5,6 +5,7 @@ import com.elk.demo.config.SearchDaoConfig;
 import com.elk.demo.elasticSearch.ElasticSearchService;
 import com.elk.demo.elasticSearch.dao.ElasticSearchCRUDDao;
 import com.elk.demo.searchentity.SearchParam;
+import com.elk.demo.searchentity.result.SearchResult;
 import com.elk.demo.searchentity.fieldparam.Field;
 import org.elasticsearch.action.bulk.BulkResponse;
 import org.elasticsearch.action.delete.DeleteResponse;
@@ -87,8 +88,13 @@ public class ElasticSearchServiceImpl implements ElasticSearchService {
 
 
     @Override
-    public List<JSONObject> search(SearchParam searchParam, Field... Field) {
+    public SearchResult search(SearchParam searchParam, Field... Field) {
         return searchDaoConfig.getElasticSearchDao(searchParam).search(searchParam,Field);
+    }
+
+    @Override
+    public SearchResult aggSearch() {
+        return null;
     }
 
 

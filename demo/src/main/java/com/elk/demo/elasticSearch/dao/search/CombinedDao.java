@@ -3,6 +3,7 @@ package com.elk.demo.elasticSearch.dao.search;
 import com.alibaba.fastjson.JSONObject;
 import com.elk.demo.searchentity.SearchParam;
 import com.elk.demo.searchentity.fieldparam.Field;
+import com.elk.demo.searchentity.result.SearchResult;
 import com.elk.demo.util.BoolQueryBuilderUtil;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
@@ -29,7 +30,7 @@ public class CombinedDao extends ElasticSearchDao{
      * @return java.util.List<com.alibaba.fastjson.JSONObject>
      **/
     @Override
-    public List<JSONObject> search(SearchParam searchParam , Field...fields){
+    public SearchResult search(SearchParam searchParam , Field...fields){
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
         BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
 
@@ -49,7 +50,6 @@ public class CombinedDao extends ElasticSearchDao{
         }
 
         SearchSourceBuilder query = searchSourceBuilder.query(boolQueryBuilder);
-        List<JSONObject> jsonObjects = searchByQuery(query, searchParam);
-        return jsonObjects;
+        return searchByQuery(query, searchParam);
     }
 }

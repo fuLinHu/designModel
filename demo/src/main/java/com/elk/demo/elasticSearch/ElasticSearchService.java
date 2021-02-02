@@ -1,11 +1,9 @@
 package com.elk.demo.elasticSearch;
 
 import com.alibaba.fastjson.JSONObject;
+import com.elk.demo.searchentity.result.SearchResult;
 import com.elk.demo.searchentity.fieldparam.Field;
-import com.elk.demo.searchentity.fieldparam.MatchField;
-import com.elk.demo.searchentity.fieldparam.MatchPhraseField;
 import com.elk.demo.searchentity.SearchParam;
-import com.elk.demo.searchentity.fieldparam.TermField;
 import org.elasticsearch.action.bulk.BulkResponse;
 import org.elasticsearch.action.delete.DeleteResponse;
 import org.elasticsearch.action.index.IndexResponse;
@@ -47,5 +45,7 @@ public interface ElasticSearchService {
     DeleteResponse deleteById(String indexName, String id);
 
 
-    List<JSONObject> search(SearchParam searchParam, Field... Field);
+    SearchResult search(SearchParam searchParam, Field... Field);
+
+    SearchResult aggSearch();
 }

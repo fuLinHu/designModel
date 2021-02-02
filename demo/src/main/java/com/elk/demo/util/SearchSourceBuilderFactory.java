@@ -1,5 +1,6 @@
-package com.elk.demo.factory;
+package com.elk.demo.util;
 
+import com.elk.demo.factory.QueryBuilderFactory;
 import com.elk.demo.searchentity.fieldparam.Field;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
