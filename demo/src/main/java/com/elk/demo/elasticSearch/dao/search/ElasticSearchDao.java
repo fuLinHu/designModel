@@ -28,27 +28,22 @@ public class ElasticSearchDao {
     @Resource
     private RestHighLevelClient restHighLevelClient;
 
-    public SearchSourceBuilder searchSourceBuilder(Field field){
-        SearchSourceBuilder searchSourceBuilder = SearchSourceBuilderFactory.getSearchSourceBuilder(field);
-        return searchSourceBuilder;
-    }
 
     public SearchResult search(SearchParam searchParam , Field... field){
-        SearchSourceBuilder searchSourceBuilder = searchSourceBuilder(field[0]);
+        SearchSourceBuilder searchSourceBuilder = SearchSourceBuilderFactory.getSearchSourceBuilder(field[0]);
         SearchResult searchResult = searchByQuery(searchSourceBuilder, searchParam);
         return searchResult;
     }
 
 
     public SearchResult searchByQuery(SearchSourceBuilder searchSourceBuilder, SearchParam serachParam) {
-
         //1. 生成SearchRequest
         SearchRequest searchRequest = SearchUtil.genertSearchRequest(serachParam);
         //2. 填充一些公共参数到searchSourceBuilder
         SearchUtil.paddingSearchSourceBuilder(searchSourceBuilder,serachParam);
         //3. 填充一些关于高亮的参数到searchSourceBuilder
         HighlighteUtil.paddingHighLightParamToSearch(serachParam,searchSourceBuilder);
-
+        //4. 将searchSourceBuilder赋值给SearchRequest
         searchRequest.source(searchSourceBuilder);
         log.info("查询条件："+searchSourceBuilder.toString());
         log.info("查询参数："+searchRequest.toString());

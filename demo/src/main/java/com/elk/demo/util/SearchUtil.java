@@ -4,16 +4,16 @@ import com.alibaba.fastjson.JSONObject;
 import com.elk.demo.searchentity.SearchPage;
 import com.elk.demo.searchentity.SearchParam;
 import com.elk.demo.searchentity.SortParam;
+import com.elk.demo.searchentity.result.AggResult;
 import com.elk.demo.searchentity.result.SearchResult;
+import lombok.extern.slf4j.Slf4j;
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.action.search.SearchType;
 import org.elasticsearch.action.support.IndicesOptions;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
-import org.elasticsearch.search.aggregations.Aggregation;
 import org.elasticsearch.search.aggregations.Aggregations;
-import org.elasticsearch.search.aggregations.metrics.ParsedAvg;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.elasticsearch.search.sort.FieldSortBuilder;
 
@@ -26,33 +26,22 @@ import java.util.*;
  * @Date 2021/2/2 15:31
  * @Version V1.0
  */
+@Slf4j
 public class SearchUtil {
 
     public static SearchResult parseSearchResponse(SearchResponse searchResponse){
         SearchResult searchResult = new SearchResult();
-        JSONObject agg = new JSONObject();
         List<JSONObject> searchList = new ArrayList<>();
-        searchResult.setAggResult(agg);
         searchResult.setSearchResult(searchList);
+        AggResult aggResult = new AggResult();
+        searchResult.setAggResult(aggResult);
 
-        SearchHits hits = searchResponse.getHits();
+        //解析聚合
         Aggregations aggregations = searchResponse.getAggregations();
-        if(aggregations!=null){
-            Map<String, Aggregation> stringAggregationMap = aggregations.asMap();
-            if(stringAggregationMap!=null&&stringAggregationMap.size()>0){
-                for (Map.Entry<String, Aggregation> stringAggregationEntry : stringAggregationMap.entrySet()) {
-                    String key = stringAggregationEntry.getKey();
-                    Aggregation value = stringAggregationEntry.getValue();
-                    String type = value.getType();
-                    if("avg".equals(type)){
-                        ParsedAvg parsedAvg = (ParsedAvg)stringAggregationEntry.getValue();
-                        double value1 = parsedAvg.getValue();
-                        agg.put(key,value1);
-                    }
-                }
-            }
-        }
+        AggParseUtil.parseAgg(aggregations,aggResult);
 
+        //解析 hits
+        SearchHits hits = searchResponse.getHits();
         for (SearchHit hit : hits) {
             JSONObject jsonObject = new JSONObject();
             boolean b = hit.hasSource();
@@ -70,6 +59,7 @@ public class SearchUtil {
             HighlighteUtil.parseHitToHighLight(hit,jsonObject);
             searchList.add(jsonObject);
         }
+        log.info("查询得最后结果为：{}",JSONObject.toJSONString(searchResult) );
         return searchResult;
     }
 
@@ -139,7 +129,11 @@ public class SearchUtil {
         if(searchPage!=null){
             Integer from = searchPage.getFrom();
             Integer size = searchPage.getSize();
-            searchSourceBuilder.from(from).size(size);
+            if(from!=null&&size!=null){
+                searchSourceBuilder.from(from).size(size);
+            }else if(from==null&&size!=null){
+                searchSourceBuilder.size(size);
+            }
         }
     }
 }

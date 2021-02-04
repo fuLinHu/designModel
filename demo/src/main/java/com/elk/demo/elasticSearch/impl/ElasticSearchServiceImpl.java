@@ -3,8 +3,11 @@ package com.elk.demo.elasticSearch.impl;
 import com.alibaba.fastjson.JSONObject;
 import com.elk.demo.config.SearchDaoConfig;
 import com.elk.demo.elasticSearch.ElasticSearchService;
+import com.elk.demo.elasticSearch.dao.AggregationsDao;
 import com.elk.demo.elasticSearch.dao.ElasticSearchCRUDDao;
+import com.elk.demo.elasticSearch.dao.SearchAggSearchComprehensiveDao;
 import com.elk.demo.searchentity.SearchParam;
+import com.elk.demo.searchentity.agg.AggField;
 import com.elk.demo.searchentity.result.SearchResult;
 import com.elk.demo.searchentity.fieldparam.Field;
 import org.elasticsearch.action.bulk.BulkResponse;
@@ -35,6 +38,10 @@ public class ElasticSearchServiceImpl implements ElasticSearchService {
     private ElasticSearchCRUDDao elasticSearchCRUDDao;
     @Resource
     private SearchDaoConfig searchDaoConfig;
+    @Resource
+    private AggregationsDao aggregationsDao;
+    @Resource
+    private SearchAggSearchComprehensiveDao searchAggSearchComprehensiveDao;
 
 
     @Override
@@ -93,8 +100,12 @@ public class ElasticSearchServiceImpl implements ElasticSearchService {
     }
 
     @Override
-    public SearchResult aggSearch() {
-        return null;
+    public SearchResult aggSearch(SearchParam searchParam, AggField aggField) {
+        return aggregationsDao.metricsAggregations(searchParam,aggField);
+    }
+    @Override
+    public SearchResult searchAggSearchComprehensive(SearchParam searchParam,Field field,AggField aggField){
+        return searchAggSearchComprehensiveDao.searchAggSearchComprehensive(searchParam,field,aggField);
     }
 
 

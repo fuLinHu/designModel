@@ -2,6 +2,7 @@ package com.elk.demo.searchentity.agg;
 
 import lombok.Data;
 import lombok.experimental.SuperBuilder;
+import org.elasticsearch.search.aggregations.AggregationBuilder;
 
 /**
  * @className
@@ -16,5 +17,6 @@ public class AggField {
     //字段名称
     private String fieldName;
     private String groupName;
-
+    //子聚合
+    private AggregationBuilder subAggregation;
 }

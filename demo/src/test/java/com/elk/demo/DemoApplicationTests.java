@@ -3,11 +3,11 @@ package com.elk.demo;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.elk.demo.elasticSearch.ElasticSearchService;
-import com.elk.demo.elasticSearch.dao.AggregationsDao;
+import com.elk.demo.factory.AggregationBuilderFactory;
 import com.elk.demo.searchentity.*;
-import com.elk.demo.searchentity.agg.AvgAggField;
+import com.elk.demo.searchentity.agg.*;
+import com.elk.demo.searchentity.agg.bucket.*;
 import com.elk.demo.searchentity.enumentity.BoolQueryType;
-import com.elk.demo.searchentity.enumentity.FieldType;
 import com.elk.demo.searchentity.enumentity.SearchDataType;
 import com.elk.demo.searchentity.fieldparam.*;
 import com.elk.demo.searchentity.result.SearchResult;
@@ -15,12 +15,16 @@ import com.elk.demo.util.BoolQueryBuilderUtil;
 import org.elasticsearch.common.xcontent.XContentBuilder;
 import org.elasticsearch.common.xcontent.XContentFactory;
 import org.elasticsearch.index.query.BoolQueryBuilder;
+import org.elasticsearch.index.query.MatchAllQueryBuilder;
 import org.elasticsearch.index.query.Operator;
 import org.elasticsearch.index.query.TermQueryBuilder;
+import org.elasticsearch.search.aggregations.bucket.histogram.DateHistogramInterval;
+import org.elasticsearch.search.aggregations.support.ValueType;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+import sun.management.Sensor;
 
 import javax.annotation.Resource;
 import java.io.IOException;
@@ -35,8 +39,7 @@ class DemoApplicationTests {
     private ElasticSearchService elasticSearchService;
 
     private String indexname = "foresttiger1";
-    @Resource
-    private AggregationsDao  aggregationsDao;
+
 
 
 
@@ -389,7 +392,129 @@ class DemoApplicationTests {
     }
     @Test
     void contextLoads() throws Exception {
-        avgAgg();
+        nestedAgg();
+    }
+
+    private void nestedAgg(){
+        SearchParam searchParam = SearchParam.builder()
+                .indexName(new String[]{indexname})
+                .searchPage(new SearchPage(null,0))
+                .build();
+        NestedAggField build = NestedAggField.builder()
+                .path("comment")
+                .groupName("comment_group")
+                .subAggregation(
+                        AggregationBuilderFactory.getQueryBuilder(
+                                MinAggField.builder()
+                                    .groupName("comment.age_group")
+                                    .fieldName("comment.age")
+                                    .build()
+                        )
+                )
+                .build();
+
+        SearchResult searchResult = elasticSearchService.aggSearch(searchParam,build);
+        parse(searchResult);
+    }
+
+    private void datehistogram(){
+        SearchParam searchParam = SearchParam.builder()
+                .indexName(new String[]{indexname})
+                .build();
+        DateHistogramAggField build = DateHistogramAggField.builder()
+                .interval(new DateHistogramAggField.Interval(DateHistogramInterval.days(2),true))
+                .format("yyyy-MM-dd")
+                .section(new DateHistogramAggField.Section("2021-01-01","2021-02-04"))
+                .fieldName("birthday")
+                .groupName("birthday_group")
+                .build();
+        SearchResult searchResult = elasticSearchService.aggSearch(searchParam,build);
+        parse(searchResult);
+    }
+
+    private void histogram(){
+        SearchParam searchParam = SearchParam.builder()
+                .indexName(new String[]{indexname})
+                .build();
+        HistogramAggField build = HistogramAggField.builder()
+                .interval(10)
+                .section(new HistogramAggField.Section(0d,200d))
+                .fieldName("heigh")
+                .groupName("heigh_group")
+                .build();
+        SearchResult searchResult = elasticSearchService.aggSearch(searchParam,build);
+        parse(searchResult);
+    }
+    private void dateRange(){
+        SearchParam searchParam = SearchParam.builder()
+                .indexName(new String[]{indexname})
+                .build();
+        DateRangeAggField build = DateRangeAggField.builder()
+                .format("MM-yyy")
+                .groupName("birthday_group")
+                .fieldName("birthday")
+                .sections(DateRangeAggField.builder().build().addSection("now-10M/M", "now-10M/M").toSections())
+                .build();
+        SearchResult searchResult = elasticSearchService.aggSearch(searchParam,build);
+        parse(searchResult);
+    }
+
+    private void rangeAgg(){
+        SearchParam searchParam = SearchParam.builder()
+                .indexName(new String[]{indexname})
+                .build();
+        RangeAggField build = RangeAggField.builder()
+                .groupName("range_heigh_group")
+                .fieldName("heigh")
+                .sections(RangeAggField.builder().build()
+                        .addSection(150d, 170d)
+                        .addSection(170d, 180d)
+                        .addSection(180d, 190d)
+                        .addSection(190d, null)
+                        .toSections()
+                ).build();
+        SearchResult searchResult = elasticSearchService.aggSearch(searchParam,build);
+        parse(searchResult);
+    }
+
+    private void filterAgg(){
+        SearchParam searchParam = SearchParam.builder()
+                .indexName(new String[]{indexname})
+                .build();
+        FilterAggField build = FilterAggField.builder()
+                .groupName("heigh_group")
+                .fieldName("heigh")
+                .filterQueryBuilder(new MatchAllQueryBuilder())
+                .subAggregation(AggregationBuilderFactory.getQueryBuilder(AvgAggField.builder().groupName("group_h").fieldName("heigh").build()))
+                .build();
+        SearchResult searchResult = elasticSearchService.aggSearch(searchParam,build);
+        parse(searchResult);
+    }
+
+    private void termsAgg(){
+        SearchParam searchParam = SearchParam.builder()
+                .indexName(new String[]{indexname})
+                .build();
+        TermsAggField build = TermsAggField.builder()
+                .groupName("heigh_group")
+                .fieldName("heigh")
+                .keyOrder(false)
+                .countOrder(false)
+                .build();
+        SearchResult searchResult = elasticSearchService.aggSearch(searchParam,build);
+        parse(searchResult);
+    }
+
+    private void StatsAggregation(){
+        SearchParam searchParam = SearchParam.builder()
+                .indexName(new String[]{indexname})
+                .build();
+        StatsAggField build = StatsAggField.builder()
+                .groupName("heigh_groupy")
+                .fieldName("heigh")
+                .build();
+        SearchResult searchResult = elasticSearchService.aggSearch(searchParam,build);
+        parse(searchResult);
     }
 
     private void avgAgg(){
@@ -400,7 +525,20 @@ class DemoApplicationTests {
                 .fieldName("heigh")
                 .groupName("heigh_groupy")
                 .build();
-        SearchResult searchResult = aggregationsDao.avgAggs(searchParam, build);
+        SearchResult searchResult = elasticSearchService.aggSearch(searchParam,build);
+        parse(searchResult);
+    }
+
+    private void valueCountAgg(){
+        SearchParam searchParam = SearchParam.builder()
+                .indexName(new String[]{indexname})
+                .build();
+        ValueCountField build = ValueCountField.builder()
+                .fieldName("heigh")
+                .groupName("heigh_groupy")
+                .valueType(ValueType.STRING)
+                .build();
+        SearchResult searchResult = elasticSearchService.aggSearch(searchParam,build);
         parse(searchResult);
     }
 

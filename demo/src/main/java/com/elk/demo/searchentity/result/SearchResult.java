@@ -2,6 +2,7 @@ package com.elk.demo.searchentity.result;
 
 import com.alibaba.fastjson.JSONObject;
 import lombok.Data;
+import org.elasticsearch.search.aggregations.Aggregation;
 
 import java.util.List;
 
@@ -15,5 +16,12 @@ import java.util.List;
 @Data
 public class SearchResult {
     private List<JSONObject> searchResult;
-    private JSONObject aggResult;
+    private AggResult aggResult;
+
+    @Override
+    public String toString() {
+        return "{\"" +
+                "searchResult\":\"" + searchResult +
+                "\", \" aggResult\": \"" + aggResult + "\"}";
+    }
 }

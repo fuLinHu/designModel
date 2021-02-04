@@ -1,6 +1,7 @@
 package com.elk.demo.elasticSearch;
 
 import com.alibaba.fastjson.JSONObject;
+import com.elk.demo.searchentity.agg.AggField;
 import com.elk.demo.searchentity.result.SearchResult;
 import com.elk.demo.searchentity.fieldparam.Field;
 import com.elk.demo.searchentity.SearchParam;
@@ -47,5 +48,7 @@ public interface ElasticSearchService {
 
     SearchResult search(SearchParam searchParam, Field... Field);
 
-    SearchResult aggSearch();
+    SearchResult aggSearch(SearchParam searchParam, AggField aggField);
+
+    SearchResult searchAggSearchComprehensive(SearchParam searchParam, Field field, AggField aggField);
 }
