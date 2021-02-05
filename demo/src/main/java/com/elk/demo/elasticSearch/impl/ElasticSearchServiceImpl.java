@@ -1,6 +1,5 @@
 package com.elk.demo.elasticSearch.impl;
 
-import com.alibaba.fastjson.JSONObject;
 import com.elk.demo.config.SearchDaoConfig;
 import com.elk.demo.elasticSearch.ElasticSearchService;
 import com.elk.demo.elasticSearch.dao.AggregationsDao;
@@ -9,7 +8,7 @@ import com.elk.demo.elasticSearch.dao.SearchAggSearchComprehensiveDao;
 import com.elk.demo.searchentity.SearchParam;
 import com.elk.demo.searchentity.agg.AggField;
 import com.elk.demo.searchentity.result.SearchResult;
-import com.elk.demo.searchentity.fieldparam.Field;
+import com.elk.demo.searchentity.fieldparam.searchbasefield.Field;
 import org.elasticsearch.action.bulk.BulkResponse;
 import org.elasticsearch.action.delete.DeleteResponse;
 import org.elasticsearch.action.index.IndexResponse;
@@ -104,8 +103,8 @@ public class ElasticSearchServiceImpl implements ElasticSearchService {
         return aggregationsDao.metricsAggregations(searchParam,aggField);
     }
     @Override
-    public SearchResult searchAggSearchComprehensive(SearchParam searchParam,Field field,AggField aggField){
-        return searchAggSearchComprehensiveDao.searchAggSearchComprehensive(searchParam,field,aggField);
+    public SearchResult searchAggSearchComprehensive(SearchParam searchParam, AggField aggField, Field... fields){
+        return searchAggSearchComprehensiveDao.searchAggSearchComprehensive(searchParam,aggField,fields);
     }
 
 

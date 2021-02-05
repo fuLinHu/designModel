@@ -1,7 +1,8 @@
 package com.elk.demo.factory;
 
-import com.elk.demo.searchentity.enumentity.FieldType;
 import com.elk.demo.searchentity.fieldparam.*;
+import com.elk.demo.searchentity.fieldparam.searchbasefield.Field;
+import com.elk.demo.searchentity.fieldparam.searchbasefield.SearchField;
 import org.apache.lucene.search.join.ScoreMode;
 import org.elasticsearch.index.query.*;
 import org.elasticsearch.index.search.MatchQuery;
@@ -23,23 +24,27 @@ public class QueryBuilderFactory {
 
 
     private static QueryBuilder prefixQueryBuilder(Field field){
-        PrefixQueryBuilder queryBuilder = new PrefixQueryBuilder(field.getFieldName(),field.getFieldValue()+"");
+        SearchField searchField = (PrefixField)field;
+        PrefixQueryBuilder queryBuilder = new PrefixQueryBuilder(searchField.getFieldName(),searchField.getFieldValue()+"");
         return queryBuilder;
     }
 
     private static QueryBuilder regexpQueryBuilder(Field field){
-        RegexpQueryBuilder queryBuilder = new RegexpQueryBuilder(field.getFieldName(),field.getFieldValue()+"");
+        SearchField searchField = (RegexpField)field;
+        RegexpQueryBuilder queryBuilder = new RegexpQueryBuilder(searchField.getFieldName(),searchField.getFieldValue()+"");
         return queryBuilder;
     }
 
     private static QueryBuilder wildcardQueryBuilder(Field field){
-        WildcardQueryBuilder wildcardQueryBuilder = new WildcardQueryBuilder(field.getFieldName(),field.getFieldValue()+"");
+        SearchField searchField = (SearchField)field;
+        WildcardQueryBuilder wildcardQueryBuilder = new WildcardQueryBuilder(searchField.getFieldName(),searchField.getFieldValue()+"");
         return wildcardQueryBuilder;
     }
 
     private static QueryBuilder matchPhraseQueryBuilder(Field field){
+        SearchField searchField = (MatchPhraseField)field;
         MatchPhraseField matchPhraseField = (MatchPhraseField)field;
-        MatchPhraseQueryBuilder matchPhraseQueryBuilder = new MatchPhraseQueryBuilder(field.getFieldName(),field.getFieldValue());
+        MatchPhraseQueryBuilder matchPhraseQueryBuilder = new MatchPhraseQueryBuilder(searchField.getFieldName(),searchField.getFieldValue());
         if (matchPhraseField.getSlop()!=null) matchPhraseQueryBuilder.slop(matchPhraseField.getSlop());
         if (matchPhraseField.getZero_terms_query()!=null&&!"".equals(matchPhraseField.getZero_terms_query())) matchPhraseQueryBuilder.zeroTermsQuery(MatchQuery.ZeroTermsQuery.valueOf(matchPhraseField.getZero_terms_query()));
         return matchPhraseQueryBuilder;
@@ -47,7 +52,7 @@ public class QueryBuilderFactory {
 
     private static QueryBuilder matchQueryBuilder(Field field){
         MatchField matchField = (MatchField)field;
-        MatchQueryBuilder matchQueryBuilder = new MatchQueryBuilder(field.getFieldName(),field.getFieldValue());
+        MatchQueryBuilder matchQueryBuilder = new MatchQueryBuilder(matchField.getFieldName(),matchField.getFieldValue());
         //后期仔细研究参数含义
         //matchQueryBuilder.fuzziness(0);
         if(matchField.getOperator()!=null&&!"".equals(matchField.getOperator())) matchQueryBuilder.operator(matchField.getOperator());
@@ -60,7 +65,7 @@ public class QueryBuilderFactory {
     private static QueryBuilder termQueryBuilder(Field field){
         TermField termField = (TermField)field;
         boolean fieldTypeIfKeyWord = termField.isFieldTypeIfKeyWord();
-        String fieldName = field.getFieldName();
+        String fieldName = termField.getFieldName();
         if(!fieldTypeIfKeyWord){
             fieldName = fieldName+".keyword";
         }
@@ -72,7 +77,7 @@ public class QueryBuilderFactory {
     private static QueryBuilder termsQueryBuilder(Field field){
         TermsField termsField = (TermsField)field;
         boolean fieldTypeIfKeyWord = termsField.isFieldTypeIfKeyWord();
-        String fieldName = field.getFieldName();
+        String fieldName = termsField.getFieldName();
         if(!fieldTypeIfKeyWord){
             fieldName = fieldName+".keyword";
         }
@@ -91,7 +96,7 @@ public class QueryBuilderFactory {
 
     private static QueryBuilder rangeQueryBuilder(Field field){
         RangeField rangeField = (RangeField)field;
-        RangeQueryBuilder rangeQueryBuilder = new RangeQueryBuilder(field.getFieldName());
+        RangeQueryBuilder rangeQueryBuilder = new RangeQueryBuilder(rangeField.getFieldName());
         if(rangeField.getBoost()!=null) rangeQueryBuilder.boost(rangeField.getBoost());
         RangeField.FromToIfIncludeLowerUpper fromTo = rangeField.getFromTo();
         if(fromTo!=null) rangeQueryBuilder.from(fromTo.getFrom()).to(fromTo.getTo()).includeLower(fromTo.isInclude_lower()).includeUpper(fromTo.isInclude_upper());
@@ -129,27 +134,26 @@ public class QueryBuilderFactory {
     //-------------------该方法要修改，如果新增 一种查询！---------------------//
 
     public static QueryBuilder getQueryBuilder(Field field){
-        FieldType fieldType = field.getFieldType();
-        if(field instanceof MatchField){
+        if(field instanceof MultiMatchField){
+            return multiMatchQueryBuilder(field);
+        }else if(field instanceof MatchField){
             return matchQueryBuilder(field);
         }else if(field instanceof MatchPhraseField){
             return matchPhraseQueryBuilder(field);
         }else if(field instanceof RangeField){
             return rangeQueryBuilder(field);
-        }else if(field instanceof MultiMatchField){
-            return multiMatchQueryBuilder(field);
-        }else if(field instanceof TermField){
-            return termQueryBuilder(field);
         }else if(field instanceof TermsField){
             return termsQueryBuilder(field);
+        }else if(field instanceof TermField){
+            return termQueryBuilder(field);
         }else if(field instanceof NestedField){
             return nestedQueryBuilder(field);
-        }
-        else if(fieldType!=null){
-            if(FieldType.PREFIX.equals(fieldType.getType())) return prefixQueryBuilder(field);
-            if(FieldType.REGEXP.equals(fieldType.getType())) return regexpQueryBuilder(field);
-            if(FieldType.WILDCARD.equals(fieldType.getType())) return wildcardQueryBuilder(field);
-            throw new RuntimeException("需要查询的字段类【"+field.getClass().getName()+"】没有对应的实现，且者是：FieldType 找不到对应的枚举:"+fieldType.getType());
+        }else if(field instanceof PrefixField){
+            return prefixQueryBuilder(field);
+        }else if(field instanceof RegexpField){
+            return regexpQueryBuilder(field);
+        }else if(field instanceof WildcardField){
+            return wildcardQueryBuilder(field);
         }
         throw new RuntimeException("需要查询的字段类【"+field.getClass().getName()+"】没有对应的实现，或者：类 FieldType 为null");
     }

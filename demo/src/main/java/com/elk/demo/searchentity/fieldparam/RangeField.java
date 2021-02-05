@@ -1,5 +1,6 @@
 package com.elk.demo.searchentity.fieldparam;
 
+import com.elk.demo.searchentity.fieldparam.searchbasefield.SearchField;
 import lombok.Builder;
 import lombok.Data;
 import lombok.experimental.SuperBuilder;
@@ -13,7 +14,7 @@ import lombok.experimental.SuperBuilder;
  */
 @Data
 @SuperBuilder
-public class RangeField extends Field {
+public class RangeField extends SearchField {
     private Float boost;
 
     //这四个底层最终都转化为  from  to

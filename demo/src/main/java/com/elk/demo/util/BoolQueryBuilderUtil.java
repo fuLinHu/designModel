@@ -2,7 +2,7 @@ package com.elk.demo.util;
 
 import com.elk.demo.factory.QueryBuilderFactory;
 import com.elk.demo.searchentity.enumentity.BoolQueryType;
-import com.elk.demo.searchentity.fieldparam.Field;
+import com.elk.demo.searchentity.fieldparam.searchbasefield.Field;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
 

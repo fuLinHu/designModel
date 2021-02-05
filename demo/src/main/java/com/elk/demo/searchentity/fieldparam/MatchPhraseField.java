@@ -1,6 +1,6 @@
 package com.elk.demo.searchentity.fieldparam;
 
-import com.elk.demo.searchentity.fieldparam.Field;
+import com.elk.demo.searchentity.fieldparam.searchbasefield.SearchField;
 import lombok.Data;
 import lombok.experimental.SuperBuilder;
 
@@ -13,7 +13,7 @@ import lombok.experimental.SuperBuilder;
  */
 @Data
 @SuperBuilder
-public class MatchPhraseField extends Field {
+public class MatchPhraseField extends SearchField {
     private Integer slop;
     /**
      * @Author 付林虎

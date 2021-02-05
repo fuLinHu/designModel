@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.elk.demo.searchentity.SearchPage;
 import com.elk.demo.searchentity.SearchParam;
 import com.elk.demo.searchentity.SortParam;
+import com.elk.demo.searchentity.fieldparam.searchbasefield.Field;
 import com.elk.demo.searchentity.result.AggResult;
 import com.elk.demo.searchentity.result.SearchResult;
 import lombok.extern.slf4j.Slf4j;
@@ -11,6 +12,8 @@ import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.action.search.SearchType;
 import org.elasticsearch.action.support.IndicesOptions;
+import org.elasticsearch.index.query.BoolQueryBuilder;
+import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
 import org.elasticsearch.search.aggregations.Aggregations;
@@ -136,4 +139,30 @@ public class SearchUtil {
             }
         }
     }
+    /**
+     * @Author 付林虎
+     * @Description //TODO  生成 BoolQueryBuilder
+     * @Date 2021/2/5 9:38
+     * @Param [searchParam, fields]
+     * @Version V1.0
+     * @return org.elasticsearch.index.query.BoolQueryBuilder
+     **/
+    public static BoolQueryBuilder genertBoolQueryBuilder(SearchParam searchParam , Field...fields){
+        BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
+        Object minimum_should_match = searchParam.getMinimum_should_match();
+        if(minimum_should_match!=null) {
+            if((minimum_should_match+"").contains("%")){
+                boolQueryBuilder.minimumShouldMatch(minimum_should_match+"");
+            }else{
+                boolQueryBuilder.minimumShouldMatch(Integer.parseInt(minimum_should_match+""));
+            }
+        }
+        if(fields!=null&&fields.length>0){
+            for (Field field : fields) {
+                BoolQueryBuilderUtil.evaluationBool(boolQueryBuilder,field);
+            }
+        }
+        return boolQueryBuilder;
+    }
+
 }

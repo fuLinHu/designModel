@@ -1,5 +1,6 @@
 package com.elk.demo.searchentity.fieldparam;
 
+import com.elk.demo.searchentity.fieldparam.searchbasefield.SearchField;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -17,7 +18,7 @@ import org.elasticsearch.index.query.Operator;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
-public class MatchField extends Field {
+public class MatchField extends SearchField {
     //操作符  OR  AND 默认是OR
     private Operator operator;
     //默认值是 false ， 表示用来在查询时如果数据类型不匹配且无法转换时会报错。如果设置成 true 会忽略错误。

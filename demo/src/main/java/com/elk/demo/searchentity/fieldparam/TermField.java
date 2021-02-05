@@ -1,5 +1,7 @@
 package com.elk.demo.searchentity.fieldparam;
 
+import com.elk.demo.searchentity.fieldparam.searchbasefield.Field;
+import com.elk.demo.searchentity.fieldparam.searchbasefield.SearchField;
 import lombok.Data;
 import lombok.experimental.SuperBuilder;
 
@@ -12,7 +14,7 @@ import lombok.experimental.SuperBuilder;
  */
 @Data
 @SuperBuilder
-public class TermField extends Field {
+public class TermField extends SearchField {
     //权重  权重越大  评分越高
     private Float boost;
     //字段类型  映射的时候是否为keyword 类型。

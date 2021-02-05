@@ -1,7 +1,6 @@
-package com.elk.demo.searchentity.fieldparam;
+package com.elk.demo.searchentity.fieldparam.searchbasefield;
 
 import com.elk.demo.searchentity.enumentity.BoolQueryType;
-import com.elk.demo.searchentity.enumentity.FieldType;
 import lombok.Builder;
 import lombok.Data;
 import lombok.experimental.SuperBuilder;
@@ -16,24 +15,6 @@ import lombok.experimental.SuperBuilder;
 @Data
 @SuperBuilder
 public class Field {
-    //字段名称
-    private String fieldName;
-    //字段值
-    private Object fieldValue;
-
-
-    /**
-     * @Author 付林虎
-     * @Description //TODO
-     * @Date 2021/1/28 9:33
-     * @Param
-     * @Version V1.0
-     * 查询类型
-     * 如果  查询类型 继承了该类 则该字段不赋值
-     * 否则需要给该字段赋值
-     * {@link com.elk.demo.searchentity.enumentity.FieldType}
-     **/
-    private FieldType fieldType;
     /**
      * @Author 付林虎
      * @Description //TODO
@@ -45,8 +26,4 @@ public class Field {
      **/
     @Builder.Default
     private BoolQueryType boolQueryType = BoolQueryType.SHOULD;
-
-
-
-
 }

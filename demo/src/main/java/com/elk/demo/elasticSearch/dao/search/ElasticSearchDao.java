@@ -1,7 +1,7 @@
 package com.elk.demo.elasticSearch.dao.search;
 
 import com.elk.demo.searchentity.SearchParam;
-import com.elk.demo.searchentity.fieldparam.Field;
+import com.elk.demo.searchentity.fieldparam.searchbasefield.Field;
 import com.elk.demo.searchentity.result.SearchResult;
 import com.elk.demo.util.HighlighteUtil;
 import com.elk.demo.util.SearchSourceBuilderFactory;

@@ -10,6 +10,7 @@ import com.elk.demo.searchentity.agg.bucket.*;
 import com.elk.demo.searchentity.enumentity.BoolQueryType;
 import com.elk.demo.searchentity.enumentity.SearchDataType;
 import com.elk.demo.searchentity.fieldparam.*;
+import com.elk.demo.searchentity.fieldparam.searchbasefield.Field;
 import com.elk.demo.searchentity.result.SearchResult;
 import com.elk.demo.util.BoolQueryBuilderUtil;
 import org.elasticsearch.common.xcontent.XContentBuilder;
@@ -24,7 +25,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
-import sun.management.Sensor;
 
 import javax.annotation.Resource;
 import java.io.IOException;
@@ -392,8 +392,34 @@ class DemoApplicationTests {
     }
     @Test
     void contextLoads() throws Exception {
-        nestedAgg();
+        searchAggSearchComprehensive();
     }
+
+    private void searchAggSearchComprehensive(){
+        SearchParam searchParam = SearchParam.builder()
+                .indexName(new String[]{indexname})
+                .searchPage(new SearchPage(0,10))
+                .build();
+        MatchField age = MatchField.builder()
+                .fieldName("age")
+                .fieldValue(23)
+                .build();
+        BoolQueryBuilder boolQueryBuilder = BoolQueryBuilderUtil.evaluationBool(new Field[]{age});
+        NestedField comment = NestedField.builder()
+                .path("comment")
+                .boolQueryBuilder(boolQueryBuilder)
+                .build();
+        Field[] fields = {comment};
+        MaxAggField build = MaxAggField.builder()
+                .groupName("heigh_group")
+                .fieldName("heigh")
+                .build();
+
+        SearchResult searchResult = elasticSearchService.searchAggSearchComprehensive(searchParam,build, fields);
+        parse(searchResult);
+    }
+
+
 
     private void nestedAgg(){
         SearchParam searchParam = SearchParam.builder()

@@ -1,6 +1,5 @@
 package com.elk.demo.searchentity.agg;
 
-import com.elk.demo.searchentity.fieldparam.Field;
 import lombok.Data;
 import lombok.experimental.SuperBuilder;
 

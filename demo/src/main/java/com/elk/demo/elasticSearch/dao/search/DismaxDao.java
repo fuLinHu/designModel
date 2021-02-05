@@ -1,17 +1,14 @@
 package com.elk.demo.elasticSearch.dao.search;
 
-import com.alibaba.fastjson.JSONObject;
 import com.elk.demo.factory.QueryBuilderFactory;
 import com.elk.demo.searchentity.SearchParam;
-import com.elk.demo.searchentity.fieldparam.Field;
+import com.elk.demo.searchentity.fieldparam.searchbasefield.Field;
 import com.elk.demo.searchentity.result.SearchResult;
 import org.elasticsearch.index.query.DisMaxQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.springframework.stereotype.Repository;
-
-import java.util.List;
 
 /**
  * @className
