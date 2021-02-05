@@ -23,4 +23,7 @@ public class MatchPhraseField extends SearchField {
      * @return
      **/
     private String zero_terms_query;
+
+    private String analyzer;
+
 }

@@ -13,8 +13,7 @@ import lombok.experimental.SuperBuilder;
 @Data
 @SuperBuilder
 public class SearchField extends Field {
-    //字段名称
-    private String fieldName;
+
     //字段值
     private Object fieldValue;
 

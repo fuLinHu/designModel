@@ -9,8 +9,15 @@ server:
 #  password: Bmsmart_2020
 #  userName: elastic
 
+#es:
+#  hosts: 10.0.46.218 #可以是多个IP 用“,” 分开
+#  port: 9400
+#  scheme: http
+#  password: Bmsmart_2020
+#  userName: elastic
+
 es:
-  hosts: 10.0.46.218 #可以是多个IP 用“,” 分开
+  hosts: 10.0.45.79 #可以是多个IP 用“,” 分开
   port: 9400
   scheme: http
   password: Bmsmart_2020

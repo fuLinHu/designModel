@@ -38,7 +38,7 @@ class DemoApplicationTests {
     @Resource
     private ElasticSearchService elasticSearchService;
 
-    private String indexname = "foresttiger1";
+    private String indexname = "opinionmonitor";
 
 
 
@@ -97,13 +97,14 @@ class DemoApplicationTests {
     private void save(){
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("name","tiger");
+        jsonObject.put("like","i like cat");
         jsonObject.put("title","中国建国100周年");
-        jsonObject.put("age",23);
+        jsonObject.put("age",26);
         jsonObject.put("birthday",new Date());
-        jsonObject.put("heigh",176);
-        jsonObject.put("message","习主席做出重要讲话");
+        jsonObject.put("heigh",186);
+        jsonObject.put("message","赵少康战情室");
         JSONObject com = new JSONObject();
-        com.put("age",24);
+        com.put("age",25);
         com.put("name","王老五");
         jsonObject.put("comment",com);
         elasticSearchService.saveDoc(indexname,jsonObject);
@@ -392,7 +393,20 @@ class DemoApplicationTests {
     }
     @Test
     void contextLoads() throws Exception {
-        searchAggSearchComprehensive();
+        datehistogram();
+    }
+
+
+    private void exit(){
+        SearchParam searchParam = SearchParam.builder()
+                .indexName(new String[]{indexname})
+                .searchPage(new SearchPage(0,10))
+                .build();
+        ExistsField age = ExistsField.builder()
+                .fieldName("age")
+                .build();
+        SearchResult searchResult = elasticSearchService.searchAggSearchComprehensive(searchParam,null, age);
+        parse(searchResult);
     }
 
     private void searchAggSearchComprehensive(){
@@ -400,20 +414,27 @@ class DemoApplicationTests {
                 .indexName(new String[]{indexname})
                 .searchPage(new SearchPage(0,10))
                 .build();
+
+        MatchField commentAge = MatchField.builder()
+                .fieldName("comment.age")
+                .fieldValue(23)
+                .build();
         MatchField age = MatchField.builder()
                 .fieldName("age")
                 .fieldValue(23)
                 .build();
-        BoolQueryBuilder boolQueryBuilder = BoolQueryBuilderUtil.evaluationBool(new Field[]{age});
+        BoolQueryBuilder boolQueryBuilder = BoolQueryBuilderUtil.evaluationBool(new Field[]{commentAge});
+
         NestedField comment = NestedField.builder()
                 .path("comment")
                 .boolQueryBuilder(boolQueryBuilder)
                 .build();
-        Field[] fields = {comment};
         MaxAggField build = MaxAggField.builder()
                 .groupName("heigh_group")
                 .fieldName("heigh")
                 .build();
+
+        Field[] fields = {comment,age};
 
         SearchResult searchResult = elasticSearchService.searchAggSearchComprehensive(searchParam,build, fields);
         parse(searchResult);
@@ -451,8 +472,8 @@ class DemoApplicationTests {
                 .interval(new DateHistogramAggField.Interval(DateHistogramInterval.days(2),true))
                 .format("yyyy-MM-dd")
                 .section(new DateHistogramAggField.Section("2021-01-01","2021-02-04"))
-                .fieldName("birthday")
-                .groupName("birthday_group")
+                .fieldName("createDate")
+                .groupName("createDate_group")
                 .build();
         SearchResult searchResult = elasticSearchService.aggSearch(searchParam,build);
         parse(searchResult);

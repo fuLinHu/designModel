@@ -48,4 +48,6 @@ public class MatchField extends SearchField {
      **/
     private String minimum_should_match;
 
+    private String analyzer;
+
 }

@@ -14,7 +14,7 @@ import lombok.experimental.SuperBuilder;
  */
 @Data
 @SuperBuilder
-public class Field {
+public class  Field {
     /**
      * @Author 付林虎
      * @Description //TODO
@@ -26,4 +26,10 @@ public class Field {
      **/
     @Builder.Default
     private BoolQueryType boolQueryType = BoolQueryType.SHOULD;
+
+    //权重
+    private Float boost;
+
+    //字段名称
+    private String fieldName;
 }

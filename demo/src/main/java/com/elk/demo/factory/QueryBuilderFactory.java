@@ -41,12 +41,23 @@ public class QueryBuilderFactory {
         return wildcardQueryBuilder;
     }
 
+    private static QueryBuilder matchPhrasePrefixField(Field field){
+        MatchPhrasePrefixField matchPhrasePrefixField = (MatchPhrasePrefixField)field;
+        MatchPhrasePrefixQueryBuilder matchPhrasePrefixQueryBuilder = QueryBuilders.matchPhrasePrefixQuery(matchPhrasePrefixField.getFieldName(), matchPhrasePrefixField.getFieldValue());
+        if(matchPhrasePrefixField.getAnalyzer()!=null)matchPhrasePrefixQueryBuilder.analyzer(matchPhrasePrefixField.getAnalyzer());
+        if(matchPhrasePrefixField.getMaxExpansions()!=null) matchPhrasePrefixQueryBuilder.maxExpansions(matchPhrasePrefixField.getMaxExpansions());
+        return matchPhrasePrefixQueryBuilder;
+    }
+
+
     private static QueryBuilder matchPhraseQueryBuilder(Field field){
         SearchField searchField = (MatchPhraseField)field;
         MatchPhraseField matchPhraseField = (MatchPhraseField)field;
         MatchPhraseQueryBuilder matchPhraseQueryBuilder = new MatchPhraseQueryBuilder(searchField.getFieldName(),searchField.getFieldValue());
         if (matchPhraseField.getSlop()!=null) matchPhraseQueryBuilder.slop(matchPhraseField.getSlop());
         if (matchPhraseField.getZero_terms_query()!=null&&!"".equals(matchPhraseField.getZero_terms_query())) matchPhraseQueryBuilder.zeroTermsQuery(MatchQuery.ZeroTermsQuery.valueOf(matchPhraseField.getZero_terms_query()));
+        if (matchPhraseField.getAnalyzer()!=null&&!"".equals(matchPhraseField.getAnalyzer()))matchPhraseQueryBuilder.analyzer(matchPhraseField.getAnalyzer());
+
         return matchPhraseQueryBuilder;
     }
 
@@ -59,6 +70,7 @@ public class QueryBuilderFactory {
         if(matchField.getLenient()!=null) matchQueryBuilder.lenient(matchField.getLenient());
         if(matchField.getZero_terms_query()!=null&&!"".equals(matchField.getZero_terms_query())) matchQueryBuilder.zeroTermsQuery(MatchQuery.ZeroTermsQuery.valueOf(matchField.getZero_terms_query()));
         if(matchField.getMinimum_should_match()!=null&&!"".equals(matchField.getMinimum_should_match())) matchQueryBuilder.minimumShouldMatch(matchField.getMinimum_should_match());
+        if (matchField.getAnalyzer()!=null&&!"".equals(matchField.getAnalyzer()))matchQueryBuilder.analyzer(matchField.getAnalyzer());
         return matchQueryBuilder;
     }
 
@@ -120,42 +132,88 @@ public class QueryBuilderFactory {
     }
 
     private static QueryBuilder nestedQueryBuilder(Field field){
-        NestedField nestedField = (NestedField)field;
-        ScoreMode scoreMode = nestedField.getScoreMode() == null ? ScoreMode.Avg : nestedField.getScoreMode();
-        if(nestedField.getBoolQueryBuilder()==null) throw new RuntimeException("nestedQueryBuilder 构造函数 参数  QueryBuilder query 不能为空！！ ");
-        NestedQueryBuilder nestedQueryBuilder = new NestedQueryBuilder(nestedField.getPath(),nestedField.getBoolQueryBuilder(),scoreMode);
+        NestedField field1 = (NestedField)field;
+        ScoreMode scoreMode = field1.getScoreMode() == null ? ScoreMode.Avg : field1.getScoreMode();
+        if(field1.getBoolQueryBuilder()==null) throw new RuntimeException("nestedQueryBuilder 构造函数 参数  QueryBuilder query 不能为空！！ ");
+        NestedQueryBuilder nestedQueryBuilder = new NestedQueryBuilder(field1.getPath(),field1.getBoolQueryBuilder(),scoreMode);
         return nestedQueryBuilder;
     }
 
+    private static QueryBuilder idsQueryBuilder(Field field){
+        IdsField field1 = (IdsField)field;
+        IdsQueryBuilder idsQueryBuilder = QueryBuilders.idsQuery();
+        idsQueryBuilder.addIds(field1.getIds());
+        return idsQueryBuilder;
+    }
 
+    private static QueryBuilder existsQueryBuilder(Field field){
+        ExistsField field1 = (ExistsField)field;
+        ExistsQueryBuilder existsQueryBuilder = QueryBuilders.existsQuery(field1.getFieldName());
+        return existsQueryBuilder;
+    }
+
+    private static QueryBuilder matchAllQueryBuilder(Field field){
+        MatchAllQueryBuilder matchAllQueryBuilder = QueryBuilders.matchAllQuery();
+
+        return matchAllQueryBuilder;
+    }
+
+    /**
+     * @Author 付林虎
+     * @Description //TODO  对字符串查询得封装  后期在丰富
+     * @Date 2021/2/5 14:33
+     * @Param [field]
+     * @Version V1.0
+     * @return org.elasticsearch.index.query.QueryBuilder
+     **/
+    private static QueryBuilder queryStringQueryBuilder(Field field){
+        QueryStringField field1 = (QueryStringField)field;
+        QueryStringQueryBuilder queryStringQueryBuilder = QueryBuilders.queryStringQuery(field1.getFieldValue()+"");
+        if(field1.getFieldsMap().size()>0)queryStringQueryBuilder.fields(field1.getFieldsMap());
+        if(field1.getAnalyzer()!=null&&!"".equals(field1.getAnalyzer())) queryStringQueryBuilder.analyzer(field1.getAnalyzer());
+        return queryStringQueryBuilder;
+    }
 
 
 
     //-------------------该方法要修改，如果新增 一种查询！---------------------//
 
     public static QueryBuilder getQueryBuilder(Field field){
+        QueryBuilder queryBuilder =null;
         if(field instanceof MultiMatchField){
-            return multiMatchQueryBuilder(field);
+            queryBuilder =  multiMatchQueryBuilder(field);
         }else if(field instanceof MatchField){
-            return matchQueryBuilder(field);
+            queryBuilder =  matchQueryBuilder(field);
         }else if(field instanceof MatchPhraseField){
-            return matchPhraseQueryBuilder(field);
+            queryBuilder =  matchPhraseQueryBuilder(field);
         }else if(field instanceof RangeField){
-            return rangeQueryBuilder(field);
+            queryBuilder =  rangeQueryBuilder(field);
         }else if(field instanceof TermsField){
-            return termsQueryBuilder(field);
+            queryBuilder =  termsQueryBuilder(field);
         }else if(field instanceof TermField){
-            return termQueryBuilder(field);
+            queryBuilder =  termQueryBuilder(field);
         }else if(field instanceof NestedField){
-            return nestedQueryBuilder(field);
+            queryBuilder =  nestedQueryBuilder(field);
         }else if(field instanceof PrefixField){
-            return prefixQueryBuilder(field);
+            queryBuilder =  prefixQueryBuilder(field);
         }else if(field instanceof RegexpField){
-            return regexpQueryBuilder(field);
+            queryBuilder =  regexpQueryBuilder(field);
         }else if(field instanceof WildcardField){
-            return wildcardQueryBuilder(field);
+            queryBuilder =  wildcardQueryBuilder(field);
+        }else if(field instanceof IdsField){
+            queryBuilder =  idsQueryBuilder(field);
+        }else if(field instanceof ExistsField){
+            queryBuilder =  existsQueryBuilder(field);
+        }else if(field instanceof MatchAllField){
+            queryBuilder =  matchAllQueryBuilder(field);
+        }else if(field instanceof MatchPhrasePrefixField){
+            queryBuilder =  matchPhrasePrefixField(field);
+        }else if(field instanceof QueryStringField){
+            queryBuilder = queryStringQueryBuilder(field);
         }
-        throw new RuntimeException("需要查询的字段类【"+field.getClass().getName()+"】没有对应的实现，或者：类 FieldType 为null");
+        if (queryBuilder==null) throw new RuntimeException("需要查询的字段类【"+field.getClass().getName()+"】没有对应的实现，或者：类 FieldType 为null");
+        if(field.getBoost()!=null) queryBuilder.boost(field.getBoost());
+        return queryBuilder;
     }
 
 
