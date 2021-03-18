@@ -7,6 +7,7 @@ import org.apache.lucene.search.join.ScoreMode;
 import org.elasticsearch.index.query.*;
 import org.elasticsearch.index.search.MatchQuery;
 import org.elasticsearch.indices.TermsLookup;
+import org.elasticsearch.search.rescore.RescorePhase;
 
 import java.util.Arrays;
 import java.util.List;
@@ -66,6 +67,26 @@ public class QueryBuilderFactory {
         MatchQueryBuilder matchQueryBuilder = new MatchQueryBuilder(matchField.getFieldName(),matchField.getFieldValue());
         //后期仔细研究参数含义
         //matchQueryBuilder.fuzziness(0);
+
+        //todo fuzziness 纠错   比如 hello 是正确的，如果 你用hallo去搜索   如果matchQueryBuilder.fuzziness("AUTO"); 则会匹配到hello
+        //GET /my_index/my_type/_search
+        //{
+        //  "query": {
+        //    "fuzzy": {
+        //      "text": {
+        //        "value": "surprize",
+        //        "fuzziness": 2
+        //      }
+        //    }
+        //  }
+        //}
+        //
+        //surprize --> 拼写错误 --> surprise --> s -> z
+        //
+        //surprize --> surprise -> z -> s，纠正一个字母，就可以匹配上，所以在fuziness指定的2范围内
+        //surprize --> surprised -> z -> s，末尾加个d，纠正了2次，也可以匹配上，在fuziness指定的2范围内
+        //surprize --> surprising -> z -> s，去掉e，ing，3次，总共要5次，才可以匹配上，始终纠正不了
+        matchQueryBuilder.fuzziness("AUTO");
         if(matchField.getOperator()!=null&&!"".equals(matchField.getOperator())) matchQueryBuilder.operator(matchField.getOperator());
         if(matchField.getLenient()!=null) matchQueryBuilder.lenient(matchField.getLenient());
         if(matchField.getZero_terms_query()!=null&&!"".equals(matchField.getZero_terms_query())) matchQueryBuilder.zeroTermsQuery(MatchQuery.ZeroTermsQuery.valueOf(matchField.getZero_terms_query()));
@@ -83,6 +104,7 @@ public class QueryBuilderFactory {
         }
         TermQueryBuilder termQueryBuilder = new TermQueryBuilder(fieldName, termField.getFieldValue());
         if (termField.getBoost()!=null) termQueryBuilder.boost(termField.getBoost());
+
         return termQueryBuilder;
     }
 

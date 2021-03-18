@@ -38,6 +38,7 @@ public class SearchAggSearchComprehensiveDao {
             SearchRequest searchRequest = SearchUtil.genertSearchRequest(searchParam);
             //2.构建QueryBuilder
             BoolQueryBuilder boolQueryBuilder = SearchUtil.genertBoolQueryBuilder(searchParam, fields);
+
             //3.构建AggregationBuilder
             AggregationBuilder aggQueryBuilder = AggregationBuilderFactory.getQueryBuilder(aggField);
             //4.构建SearchSourceBuilder

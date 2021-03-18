@@ -14,6 +14,8 @@ import lombok.experimental.SuperBuilder;
 @Data
 @SuperBuilder
 public class MatchPhraseField extends SearchField {
+    //slop的含义是什么？
+    //query string，搜索文本，中的几个term，要经过  最多几次移动才能与一个document匹配，这个移动的次数，就是slop
     private Integer slop;
     /**
      * @Author 付林虎
