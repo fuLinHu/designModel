@@ -1,0 +1,11 @@
+version: '3'
+services:
+  redis:
+    restart: always  #关机或者重启机器时，docker同时重启容器
+    image: redis:5
+    container_name: redis
+    command: redis-server --appendonly yes
+    volumes:
+      - /mydata/redis/data:/data #数据文件挂载
+    ports:
+      - 6379:6379

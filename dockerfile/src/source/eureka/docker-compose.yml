@@ -1,0 +1,9 @@
+version: '3'
+services:
+  eureka: #指定服务名
+    image: smartke-cloud-eureka-server:1.0
+    ports:
+      - "8762:8761" #指定映射端口  宿主机port:容器port
+    build: /usr/local/data/eureka #指定Dockfile 的路径  可以相对或者绝对 当镜像smartke-cloud-eureka-server 不存在的时候构建镜像
+    expose:
+      - 8761 # 声名容器对外暴露的端口

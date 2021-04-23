@@ -14,7 +14,7 @@ import javax.annotation.Resource;
  * @Version V1.0
  */
 @RestController
-public class IndexController {
+public class IndexController1 {
     @Resource
     private StringRedisTemplate stringRedisTemplate;
 

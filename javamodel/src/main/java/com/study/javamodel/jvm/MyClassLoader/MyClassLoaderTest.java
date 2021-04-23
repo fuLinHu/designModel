@@ -10,6 +10,9 @@ import java.io.FileInputStream;
  * @Version V1.0
  */
 public class MyClassLoaderTest{
+
+
+
     public static class MyClassLoader extends ClassLoader {
         private String  classPath;
         public MyClassLoader(String classPath) {
@@ -25,6 +28,8 @@ public class MyClassLoaderTest{
             return data;
         }
 
+
+        //实现双亲委派
         @Override
         protected Class<?> loadClass(String name, boolean resolve) throws ClassNotFoundException {
             return super.loadClass(name, resolve);
@@ -43,7 +48,7 @@ public class MyClassLoaderTest{
     }
 
     public static void main(String[] args) throws ClassNotFoundException, IllegalAccessException, InstantiationException {
-        MyClassLoader myClassLoader = new MyClassLoader("E:\\fliedata\\class");
+        MyClassLoader myClassLoader = new MyClassLoader("E:\\data");
         Class<?> aClass = myClassLoader.loadClass("com.study.javamodel.jvm.MyClassLoader.TestMyLoad");
         System.out.println(aClass.getClassLoader());
 //        Class<?> aClass = myClassLoader.findClass("com.study.javamodel.jvm.MyClassLoader.TestMyLoad");

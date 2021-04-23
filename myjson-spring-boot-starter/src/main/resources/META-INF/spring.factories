@@ -1,2 +1,4 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-com.mystarter.myjsonspringbootstarter.config.MyJsonAutoConfiguration
+com.mystarter.myjsonspringbootstarter.config.MyJsonAutoConfiguration,\
+com.mystarter.myjsonspringbootstarter.service.impl.ForestTiger1,\
+com.mystarter.myjsonspringbootstarter.service.impl.ForestTiger2
