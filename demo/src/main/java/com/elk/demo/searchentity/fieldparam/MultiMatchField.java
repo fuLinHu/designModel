@@ -36,4 +36,7 @@ public class MultiMatchField extends MatchField {
      * @同 {@link SearchParam#tie_breaker}
      **/
     private Float tie_breaker;
+
+    //refix_length，不会被“模糊化”的初始字符的数量。这有助于减少必须检查的术语数量。默认为0。【设置为0的话，查询会比较慢】
+    private Integer prefixLength;
 }

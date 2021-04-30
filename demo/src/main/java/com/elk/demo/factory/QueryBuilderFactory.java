@@ -150,6 +150,8 @@ public class QueryBuilderFactory {
         if(multiMatchField.getLenient()!=null) multiMatchQueryBuilder.lenient(multiMatchField.getLenient());
         if(multiMatchField.getMinimum_should_match()!=null) multiMatchQueryBuilder.minimumShouldMatch(multiMatchField.getMinimum_should_match());
         if(multiMatchField.getOperator()!=null) multiMatchQueryBuilder.operator(multiMatchField.getOperator());
+        if(multiMatchField.getPrefixLength()!=null) multiMatchQueryBuilder.prefixLength(multiMatchField.getPrefixLength());
+
         return multiMatchQueryBuilder;
     }
 
