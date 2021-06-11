@@ -1,0 +1,16 @@
+server:
+  port: 7082
+
+#spring:
+#  cloud:
+#    sentinel:
+#      transport:
+#        dashboard: localhost:7777
+
+
+#暴露actuator端点
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'

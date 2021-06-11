@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: order-server
+  cloud:
+    nacos:
+      config:
+        server-addr: 10.0.41.45:8888
+        shared-configs: common.yml #不同项目中的 公共配置文件
+        file-extension: yaml
+
+# `${spring.application.name}.${file-extension:properties}`
+#profile粒度的配置   `${spring.application.name}-${profile}.${file-extension:properties}`

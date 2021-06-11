@@ -1,12 +1,12 @@
 server:
-  port: 7788
+  port: 8888
 spring:
   application:
-    name: auth-server-vue
+    name: auth-server
   cloud:
     nacos:
       discovery:
-        server-addr: localhost:8888
+        server-addr: localhost:8848
   datasource:
     username: root
     password: root
@@ -15,9 +15,12 @@ spring:
     type: com.alibaba.druid.pool.DruidDataSource
 
   redis:
-    host: localhost
+    host: 192.168.102.137
     port: 6379
     #password: root
+  session:
+    store-type: redis
+    timeout: 1800
 logging:
   level:
      com:
@@ -26,8 +29,3 @@ logging:
           role:
             mapper: debug
 
-pagehelper:
-  helperDialect: mysql
-  reasonable: true
-  supportMethodsArguments: true
-  params: count=countSql
