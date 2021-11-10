@@ -1,0 +1,9 @@
+server:
+    port: 9091
+
+logging:
+    level:
+        root: info
+ziyou:
+    json:
+        name: 123456

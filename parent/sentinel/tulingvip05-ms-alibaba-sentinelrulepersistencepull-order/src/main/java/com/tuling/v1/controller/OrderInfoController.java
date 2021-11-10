@@ -26,7 +26,7 @@ public class OrderInfoController {
     @RequestMapping("/selectOrderInfoById/{orderNo}")
     public Object selectOrderInfoById(@PathVariable("orderNo") String orderNo) {
 
-        OrderInfo orderInfo = orderInfoMapper.selectOrderInfoById(orderNo);
+        OrderInfo orderInfo = null;
         if(null == orderInfo) {
             return "根据orderNo:"+orderNo+"查询没有该订单";
         }

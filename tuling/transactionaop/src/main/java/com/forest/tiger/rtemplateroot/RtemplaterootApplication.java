@@ -1,0 +1,13 @@
+package com.forest.tiger.rtemplateroot;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class RtemplaterootApplication {
+
+    public static void main(String[] args) {
+        SpringApplication.run(RtemplaterootApplication.class, args);
+    }
+
+}

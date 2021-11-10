@@ -1,13 +1,13 @@
 
 server:
-  port: 8855
+  port: 8155
 spring:
   application:
     name: portal-web-vue
   cloud:
     nacos:
       discovery:
-        server-addr: localhost:8848
+        server-addr: localhost:8888
   thymeleaf:
     cache: false
 ribbon:

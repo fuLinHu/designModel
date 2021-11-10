@@ -11,7 +11,7 @@ import java.io.FileInputStream;
  */
 public class MyClassLoaderTestBreak {
     public static class MyClassLoader extends ClassLoader {
-        private String  classPath;
+        private String classPath;
         public MyClassLoader(String classPath) {
             this.classPath = classPath;
         }
@@ -88,14 +88,6 @@ public class MyClassLoaderTestBreak {
 
        aClass = myClassLoader.loadClass("sun.nio.ByteBuffered");
         System.out.println(aClass);
-        //sun\nio
-//        Class<?> aClass = myClassLoader.findClass("com.study.javamodel.jvm.MyClassLoader.TestMyLoad");
-//        Object instance = aClass.newInstance();
-//        TestMyLoad testMyLoad = new TestMyLoad();
-//        ClassLoader classLoader = testMyLoad.getClass().getClassLoader();
-//        System.out.println(instance instanceof TestMyLoad);
-//        System.out.println(instance);
-//        System.out.println(aClass.getClassLoader());
-//        System.out.println(classLoader);
+
     }
 }

@@ -1,6 +1,6 @@
 package mytomcat.rmi;
 
-import cn.com.victorysoft.jdbc.rmi.ClientDriver;
+
 
 import java.io.ByteArrayInputStream;
 import java.io.FilterInputStream;
@@ -15,7 +15,6 @@ import java.io.InputStream;
  */
 public class RmiClient {
     public static void main(String[] args) {
-        ClientDriver clientDriver = new ClientDriver();
         InputStream inputStream =new ByteArrayInputStream("fulinhu".getBytes());
         FilterInputStream filterInputStream;
     }

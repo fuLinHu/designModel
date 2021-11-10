@@ -105,7 +105,7 @@
     <orderEntry type="library" name="Maven: org.springframework:spring-aop:5.2.6.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-expression:5.2.6.RELEASE" level="project" />
     <orderEntry type="module" module-name="tulingvip-ms-alibaba-dao" />
-    <orderEntry type="module" module-name="tulingvip-ms-alibaba-common" />
+    <orderEntry type="module" module-name="tulingvip-ms-alibaba-common (1)" />
     <orderEntry type="library" name="Maven: org.projectlombok:lombok:1.18.12" level="project" />
     <orderEntry type="library" name="Maven: com.alibaba:fastjson:1.2.47" level="project" />
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-annotations:2.10.4" level="project" />
